@@ -6,7 +6,7 @@ package
 
 	public class RadioButtonManager extends EventDispatcher
 	{	
-		private var _radioButtons:Vector.<RadioButton>;
+		private var _radioButtons:Array;
 		private var _mode:String;
 		
 		private var _emptyButtonTexture:Texture;
@@ -14,7 +14,7 @@ package
 		
 		public function RadioButtonManager(emptyButtonTexture:Texture, checkButtonTexture:Texture)
 		{
-			_radioButtons = new Vector.<RadioButton>();
+			_radioButtons = new Array();
 			
 			_emptyButtonTexture = emptyButtonTexture;
 			_checkButtonTexture = checkButtonTexture;
@@ -43,16 +43,17 @@ package
 			if(!RadioButton(event.currentTarget).radioState)
 			{
 				_mode = RadioButton(event.currentTarget).key;
-				_radioButtons.every(setFalse);
+			//	trace(_mode);
+				for(var i:int = 0; i < _radioButtons.length; i++)
+				{
+					_radioButtons[i].radioState = false;
+					_radioButtons[i].upState = _emptyButtonTexture;
+					_radioButtons[i].setStateTexture(_emptyButtonTexture);
+				}
+				RadioButton(event.currentTarget).upState = _checkButtonTexture;
 				RadioButton(event.currentTarget).setStateTexture(_checkButtonTexture);
 				RadioButton(event.currentTarget).radioState = true;
 				dispatchEvent(new Event("ModeChange"));
-			}
-			
-			function setFalse(element:RadioButton, index:int, arr:Array):void
-			{
-				element.radioState = false;
-				element.setStateTexture(_emptyButtonTexture);
 			}
 		}
 	}

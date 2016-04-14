@@ -83,20 +83,20 @@ package
 			var testImage:Image = new Image(_spriteSheet.subTextures["iu3"]);
 		//	trace(testImage.width);
 		//	var testImage:Image = new Image(Texture.fromBitmap(_spriteSheet.spriteBitmap));
-		//	var testImage2:Image = new Image(_spriteSheet.subTextures["iu2"]);
+			var testImage2:Image = new Image(_spriteSheet.subTextures["iu2"]);
 		//	trace(_spriteSheet.subTextures["iu3"]);
 			
 			testImage.width = getLocalWidth(testImage.width);
 			testImage.height = getLocalHeight(testImage.height);
 			
-		//	testImage2.width = getLocalWidth(testImage2.width);
-		//	testImage2.height = getLocalHeight(testImage2.height);
+			testImage2.width = getLocalWidth(testImage2.width);
+			testImage2.height = getLocalHeight(testImage2.height);
 			
 		//	testImage2.width = (testImage2.width/100)*_width;
 		//	testImage2.height = (testImage2.height/100)*_height;
 			
 			_content.addChild(testImage);
-		//	_content.addChild(testImage2);
+			_content.addChild(testImage2);
 		}
 		
 		private function getLocalWidth(width:Number):Number
