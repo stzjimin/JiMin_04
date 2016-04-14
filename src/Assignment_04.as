@@ -3,7 +3,7 @@ package
 	import flash.display.Sprite;
 	import starling.core.Starling;
 	
-	[SWF(width="1024", height="1024", frameRate="60", backgroundColor="#FFFFF0")]
+	[SWF(width="700", height="700", frameRate="60", backgroundColor="#FFFFF0")]
 	public class Assignment_04 extends Sprite
 	{
 		private var _starling:Starling;

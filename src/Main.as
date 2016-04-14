@@ -1,28 +1,22 @@
 package
 {
 	import flash.display.Bitmap;
-	import flash.display.Loader;
-	import flash.events.IOErrorEvent;
-	import flash.filesystem.File;
-	import flash.net.FileFilter;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
-	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import starling.textures.TextureAtlas;
 
 	public class Main extends Sprite
-	{	
-		private var _loadeButton:Button;
+	{
 		private var _resourceLoader:ResourceLoader;
 		private var _resources:Dictionary = new Dictionary();
 		
-		private var _spriteSheets:Vector.<Bitmap> = new Vector.<Bitmap>();
+		private var _spriteSheets:Vector.<SpriteSheet> = new Vector.<SpriteSheet>();
+		
+		private var _loadeButton:ButtonObject;
+		private var _display:Display;
 		
 		public function Main()
 		{
@@ -32,20 +26,21 @@ package
 		
 		private function completeResourceLoad():void
 		{
-		//	trace(_resources["iu3.jpg"].width);
-			/*
-			var testImage:Image = new Image(Texture.fromBitmap(_resources["button.png"] as Bitmap));
-			testImage.width = _resources["button.png"].width;
-			testImage.height = _resources["button.png"].height;
-			testImage.x = 20;
-			*/
-		//	trace(_resources["iu3.jpg"].width);
-		//	addChild(testImage);
-			var loadButton:Button = new Button(Texture.fromBitmap(_resources["button.png"] as Bitmap));
-			loadButton.width = _resources["button.png"].width;
-			loadButton.height = _resources["button.png"].height;
-			loadButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
-			addChild(loadButton);
+			_loadeButton = new ButtonObject(Texture.fromBitmap(_resources["load.png"] as Bitmap));
+			_loadeButton.width = 50;
+			_loadeButton.height = 40;
+			_loadeButton.x = 30;
+			_loadeButton.y = 550;
+			_loadeButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
+			
+			_display = new Display();
+			_display.x = 25;
+			_display.y = 25;
+			_display.width = 650;
+			_display.height = 500;
+			
+			addChild(_display);
+			addChild(_loadeButton);
 		}
 		
 		private function onClickLoadButton(event:Event):void
@@ -55,10 +50,22 @@ package
 			var spriteLoader:SpriteLoader = new SpriteLoader(completeLoad);
 		}
 		
-		private function completeLoad(loadAtlas:TextureAtlas):void
+		private function completeLoad(name:String, loadSprite:Bitmap, loadXml:XML):void
 		{
-			var testImage:Image = new Image(loadAtlas.texture);
-			addChild(testImage);
+		//	var testImage:Image = new Image(Texture.fromBitmap(loadSprite));
+		//	addChild(testImage);
+			var spriteSheet:SpriteSheet = new SpriteSheet(name, loadSprite, loadXml);
+			_spriteSheets.push(spriteSheet);
+		//	addChild(_spriteSheets[0].spriteBitmap);
+		//	var testImage:Image = new Image(Texture.fromBitmap(_spriteSheets[0].spriteBitmap));
+		//	addChild(testImage);
+		//	for(var i:int = 0; i < _spriteSheets[0].images.length; i++)
+		//		trace(_spriteSheets[0].images[i].name);
+		//	trace(loadXml);
+		//	trace(loadXml.child("SubTexture").name());
+		//	trace(loadXml.child("SubTexture")[0].attribute("name"));
+			_display.spriteSheet = _spriteSheets[0];
+			_display.viewSprite();
 		}
 	}
 }

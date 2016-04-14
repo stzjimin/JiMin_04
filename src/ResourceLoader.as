@@ -20,8 +20,8 @@ package
 		private var _assetsLoader:AssetManager;
 		private var _libName:String;
 		
-		private var _assetLength:int;
-		private var _assetCounter:int;
+		private var _assetLength:int = 1;
+		private var _assetCounter:int = 0;
 		
 		private var _completeFunc:Function;
 		
@@ -99,6 +99,7 @@ package
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 			_assetCounter++;
 			
+			trace(_assetCounter + " / " + _assetLength);
 			if(_assetCounter == _assetLength)
 				_completeFunc();
 		}

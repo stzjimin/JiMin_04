@@ -8,14 +8,16 @@ package
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
-	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 
 	public class SpriteLoader
 	{
 		private var _file:File;
+		
 		private var _spriteSheet:Bitmap;
 		private var _xml:XML;
+		private var _name:String;
+		
 		private var _textureAtlas:TextureAtlas;
 		private var _completeFunc:Function;
 		
@@ -57,6 +59,7 @@ package
 		//	testImage.height = Bitmap(event.currentTarget.loader.content).height;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
 		//	addChild(testImage);
+			_name = _file.nativePath.replace(".png");
 			
 			var urlRequest:URLRequest = new URLRequest(_file.nativePath.replace("png","xml"));
 			trace(urlRequest.url);
@@ -67,13 +70,12 @@ package
 		
 		private function onCompleteXmlLoad(event:Event):void
 		{
-			trace(event.currentTarget.data);
+		//	trace(event.currentTarget.data);
 			_xml = new XML(event.currentTarget.data);
 			event.currentTarget.removeEventListener("complete", onCompleteXmlLoad);
-			_textureAtlas = new TextureAtlas(Texture.fromBitmap(_spriteSheet), _xml);
 			//	trace(textureAtlas.getFrame("iu3").x + ", " + textureAtlas.getFrame("iu3").y + ", " + textureAtlas.getFrame("iu3").width + ", " + textureAtlas.getFrame("iu3").height);
 			//	trace(textureAtlas.getRegion("iu3"));
-			_completeFunc(_textureAtlas);
+			_completeFunc(_name, _spriteSheet, _xml);
 		}
 	}
 }
