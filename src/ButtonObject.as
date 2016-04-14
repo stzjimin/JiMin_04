@@ -70,7 +70,7 @@ package
 			}
 		}
 		
-		private function setStateTexture(stateTexture:Texture):void
+		public function setStateTexture(stateTexture:Texture):void
 		{
 			_currentImage.texture = stateTexture;
 		}

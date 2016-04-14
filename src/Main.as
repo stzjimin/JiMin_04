@@ -1,9 +1,11 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -17,6 +19,10 @@ package
 		
 		private var _loadeButton:ButtonObject;
 		private var _display:Display;
+		private var _displayBound:Quad;
+		private var _radioManager:RadioButtonManager;
+		private var _animationButton:RadioButton;
+		private var _imageButton:RadioButton;
 		
 		public function Main()
 		{
@@ -26,6 +32,12 @@ package
 		
 		private function completeResourceLoad():void
 		{
+			_radioManager = new RadioButtonManager(Texture.fromBitmap(_resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(_resources["checkRadio.png"] as Bitmap));
+			_radioManager.mode = "Animation";
+			_radioManager.addEventListener("ModeChange",onChangeMode);
+			_animationButton = _radioManager.createButton("Animation");
+			_imageButton = _radioManager.createButton("Image");
+			
 			_loadeButton = new ButtonObject(Texture.fromBitmap(_resources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
 			_loadeButton.height = 40;
@@ -33,14 +45,27 @@ package
 			_loadeButton.y = 550;
 			_loadeButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
 			
-			_display = new Display();
+			_display = new Display(650, 500);
 			_display.x = 25;
 			_display.y = 25;
-			_display.width = 650;
-			_display.height = 500;
 			
+			/*
+			_displayBound = new Quad(_display.width, _display.height);
+			_displayBound.x = 25;
+			_displayBound.y = 25;
+			_displayBound.color = Color.GRAY;
+			_displayBound.scale = 1.1;
+				
+			addChild(_displayBound);
+			*/
 			addChild(_display);
 			addChild(_loadeButton);
+		}
+		
+		private function onChangeMode(event:Event):void
+		{
+			_display.mode = _radioManager.mode;
+			
 		}
 		
 		private function onClickLoadButton(event:Event):void
