@@ -20,11 +20,4 @@
 		<nature>com.adobe.flexbuilder.project.apollonature</nature>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>[source path] starling</name>
-			<type>2</type>
-			<location>C:/Users/user/Desktop/starling</location>
-		</link>
-	</linkedResources>
 </projectDescription>
