@@ -10,6 +10,7 @@ package
 		public function RadioButton(upState:Texture, key:String)
 		{
 			_key = key;
+			_radioState = false;
 			super(upState);
 		}
 

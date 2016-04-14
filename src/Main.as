@@ -1,13 +1,12 @@
 package
 {
 	import flash.display.Bitmap;
-	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.text.TextField;
 	import starling.textures.Texture;
 
 	public class Main extends Sprite
@@ -23,6 +22,9 @@ package
 		private var _radioManager:RadioButtonManager;
 		private var _animationButton:RadioButton;
 		private var _imageButton:RadioButton;
+		private var _animaionText:TextField;
+		private var _imageText:TextField;
+		private var _animationMode:AnimationMode;
 		
 		public function Main()
 		{
@@ -35,8 +37,26 @@ package
 			_radioManager = new RadioButtonManager(Texture.fromBitmap(_resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(_resources["checkRadio.png"] as Bitmap));
 			_radioManager.mode = "Animation";
 			_radioManager.addEventListener("ModeChange",onChangeMode);
+			
+			_animaionText = new TextField(100, 20, "Animation");
+			_animaionText.x = 150;
+			_animaionText.y = 550;
+			
+			_imageText = new TextField(100, 20, "Image");
+			_imageText.x = 150;
+			_imageText.y = 580;
+			
 			_animationButton = _radioManager.createButton("Animation");
+			_animationButton.width = 20;
+			_animationButton.height = 20;
+			_animationButton.x = 120;
+			_animationButton.y = 550;
+			
 			_imageButton = _radioManager.createButton("Image");
+			_imageButton.width = 20;
+			_imageButton.height = 20;
+			_imageButton.x = 120;
+			_imageButton.y = 580;
 			
 			_loadeButton = new ButtonObject(Texture.fromBitmap(_resources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
@@ -44,6 +64,11 @@ package
 			_loadeButton.x = 30;
 			_loadeButton.y = 550;
 			_loadeButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
+			
+			_animationMode = new AnimationMode(_resources);
+			_animationMode.x = 300;
+			_animationMode.y = 550;
+			_animationMode.visible = false;
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -60,12 +85,25 @@ package
 			*/
 			addChild(_display);
 			addChild(_loadeButton);
+			addChild(_animationButton);
+			addChild(_imageButton);
+			addChild(_animaionText);
+			addChild(_imageText);
+			addChild(_animationMode);
 		}
 		
 		private function onChangeMode(event:Event):void
 		{
 			_display.mode = _radioManager.mode;
-			
+			if(_display.mode == "Animation")
+			{
+				_animationMode.visible = true;
+			}
+			else if(_display.mode == "Image")
+			{
+				_animationMode.visible = false;
+			}
+			trace(_display.mode);
 		}
 		
 		private function onClickLoadButton(event:Event):void
