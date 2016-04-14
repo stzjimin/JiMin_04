@@ -46,7 +46,17 @@ package
 			addChild(_contents);
 			addEventListener(TouchEvent.TOUCH, onTouch);
 		}
-		
+
+		public function get upState():Texture
+		{
+			return _upState;
+		}
+
+		public function set upState(value:Texture):void
+		{
+			_upState = value;
+		}
+
 		public function get state():String { return _state; }
 		
 		public function set state(value:String):void
