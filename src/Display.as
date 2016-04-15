@@ -8,14 +8,11 @@ package
 	import starling.utils.Color;
 
 	public class Display extends DisplayObjectContainer
-	{
-		private const AnimationMode:String = "Animation";
-		private const ImageMode:String = "Image";
-		
+	{		
 		private var _content:Sprite;
 		private var _backGround:Quad;
 		
-		private var _mode:String = AnimationMode;
+		private var _mode:String = RadioState.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
 		private var _spriteTexture:Texture;
 		private var _spriteImage:Image;
@@ -68,11 +65,11 @@ package
 		public function set mode(value:String):void
 		{
 			if(value == "Animation" || value == "animation" || value == "ANIMATION")
-				_mode = AnimationMode;
+				_mode = RadioState.ANIMATION;
 			else if(value == "Image" || value == "image" || value == "IMAGE")
-				_mode = ImageMode;
+				_mode = RadioState.IMAGE;
 			else
-				_mode = AnimationMode;
+				_mode = RadioState.ANIMATION;
 		}
 		
 		public function viewSprite():void

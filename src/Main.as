@@ -1,7 +1,6 @@
 package
 {
 	import flash.display.Bitmap;
-	import flash.utils.Dictionary;
 	
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -12,7 +11,6 @@ package
 	public class Main extends Sprite
 	{
 		private var _resourceLoader:ResourceLoader;
-		private var _resources:Dictionary = new Dictionary();
 		
 		private var _spriteSheets:Vector.<SpriteSheet> = new Vector.<SpriteSheet>();
 		
@@ -25,17 +23,18 @@ package
 		private var _animaionText:TextField;
 		private var _imageText:TextField;
 		private var _animationMode:AnimationMode;
+		private var _drop:Dropdownbar;
 		
 		public function Main()
 		{
 			_resourceLoader = new ResourceLoader("GUI_resources", completeResourceLoad);
-			_resourceLoader.loadResource(_resources);
+			_resourceLoader.loadResource(Resource.rasources);
 		}
 		
 		private function completeResourceLoad():void
 		{
-			_radioManager = new RadioButtonManager(Texture.fromBitmap(_resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(_resources["checkRadio.png"] as Bitmap));
-			_radioManager.mode = "Animation";
+			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.rasources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["checkRadio.png"] as Bitmap));
+			_radioManager.mode = RadioState.ANIMATION;
 			_radioManager.addEventListener("ModeChange",onChangeMode);
 			
 			_animaionText = new TextField(100, 20, "Animation");
@@ -46,26 +45,26 @@ package
 			_imageText.x = 150;
 			_imageText.y = 580;
 			
-			_animationButton = _radioManager.createButton("Animation");
+			_animationButton = _radioManager.createButton(RadioState.ANIMATION);
 			_animationButton.width = 20;
 			_animationButton.height = 20;
 			_animationButton.x = 120;
 			_animationButton.y = 550;
 			
-			_imageButton = _radioManager.createButton("Image");
+			_imageButton = _radioManager.createButton(RadioState.IMAGE);
 			_imageButton.width = 20;
 			_imageButton.height = 20;
 			_imageButton.x = 120;
 			_imageButton.y = 580;
 			
-			_loadeButton = new ButtonObject(Texture.fromBitmap(_resources["load.png"] as Bitmap));
+			_loadeButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
 			_loadeButton.height = 40;
 			_loadeButton.x = 30;
 			_loadeButton.y = 550;
 			_loadeButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
 			
-			_animationMode = new AnimationMode(_resources);
+			_animationMode = new AnimationMode();
 			_animationMode.x = 300;
 			_animationMode.y = 550;
 			_animationMode.visible = false;
@@ -83,6 +82,19 @@ package
 				
 			addChild(_displayBound);
 			*/
+			
+			_drop = new Dropdownbar(100);
+			_drop.x = 300;
+			_drop.y = 550;
+			_drop.visible = false;
+			_drop.addEventListener(Event.TRIGGERED, onClickDropdownbar);
+			_drop.createList("test1");
+			_drop.createList("test2");
+			_drop.createList("test3");
+			_drop.createList("test4");
+			_drop.createList("test5");
+			
+			
 			addChild(_display);
 			addChild(_loadeButton);
 			addChild(_animationButton);
@@ -90,21 +102,32 @@ package
 			addChild(_animaionText);
 			addChild(_imageText);
 			addChild(_animationMode);
+			addChild(_drop);
 		}
 		
 		private function onChangeMode(event:Event):void
 		{
 			_display.mode = _radioManager.mode;
-			if(_display.mode == "Animation")
+			if(_display.mode == RadioState.ANIMATION)
 			{
 				_animationMode.visible = true;
+				_drop.visible = false;
 			}
-			else if(_display.mode == "Image")
+			else if(_display.mode == RadioState.IMAGE)
 			{
+				_drop.visible = true;
 				_animationMode.visible = false;
 			}
 			trace(_display.mode);
 		}
+		
+		
+		private function onClickDropdownbar(event:Event):void
+		{
+			_drop.togleVisible();
+		//	trace("bbb");
+		}
+		
 		
 		private function onClickLoadButton(event:Event):void
 		{

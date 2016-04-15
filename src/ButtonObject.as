@@ -16,7 +16,7 @@ package
 
 	public class ButtonObject extends DisplayObjectContainer
 	{
-		private const _downStateScale:Number = 0.9;
+		private var _downStateScale:Number = 0.9;
 		
 		private var _upState:Texture;
 		private var _state:String = ButtonState.UP;
@@ -45,6 +45,16 @@ package
 			_contents.addChild(_currentImage);
 			addChild(_contents);
 			addEventListener(TouchEvent.TOUCH, onTouch);
+		}
+
+		public function get contents():Sprite
+		{
+			return _contents;
+		}
+
+		public function set downStateScale(value:Number):void
+		{
+			_downStateScale = value;
 		}
 
 		public function get upState():Texture
