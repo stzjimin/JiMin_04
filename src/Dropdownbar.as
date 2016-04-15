@@ -30,7 +30,7 @@ package
 		private var _downButton:ButtonObject;
 		private var _content:Sprite;
 		
-		public function Dropdownbar(width:int)
+		public function Dropdownbar(width:int, dropTexture:Texture, upTexture:Texture, downTexture:Texture)
 		{
 			_selected = 0;
 			_list = new Vector.<TextField>();
@@ -40,7 +40,7 @@ package
 			_listHeight = 20;
 			_listY = _listHeight / 2;
 			
-			_dropButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap));
+			_dropButton = new ButtonObject(dropTexture);
 			_dropButton.width = 20;
 			_dropButton.height = 20;
 			_dropButton.x = _width - 20;
@@ -53,13 +53,13 @@ package
 			_backGround.alpha = 0.5;
 			_backGround.color = Color.SILVER;
 			
-			_upButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap));
+			_upButton = new ButtonObject(upTexture);
 			_upButton.width = 20;
 			_upButton.height = 40;
 			_upButton.x = _width-20;
 			_upButton.addEventListener(Event.TRIGGERED, onClickUpButton);
 			
-			_downButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
+			_downButton = new ButtonObject(downTexture);
 			_downButton.width = 20;
 			_downButton.height = 40;
 			_downButton.x = _width-20;
@@ -110,7 +110,7 @@ package
 			togleVisible();
 		}
 		
-		private function refreshList():void
+		public function refreshList():void
 		{
 			for(var j:int = _content.numChildren-1; j > 2; j--)
 			{

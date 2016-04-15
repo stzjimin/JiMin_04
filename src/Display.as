@@ -1,13 +1,12 @@
 package
 {
-	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 	import starling.utils.Color;
 
-	public class Display extends DisplayObjectContainer
+	public class Display extends Sprite
 	{		
 		private var _content:Sprite;
 		private var _backGround:Quad;

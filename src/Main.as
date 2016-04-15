@@ -24,6 +24,7 @@ package
 		private var _animaionText:TextField;
 		private var _imageText:TextField;
 		private var _animationMode:AnimationMode;
+		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
 		
 		public function Main()
@@ -72,11 +73,16 @@ package
 			_animationMode.y = 550;
 			_animationMode.visible = false;
 			
+			_imageMode = new ImageMode();
+			_imageMode.x = 370;
+			_imageMode.y = 550;
+			_imageMode.visible = false;
+			
 			_display = new Display(650, 500);
 			_display.x = 25;
 			_display.y = 25;
 			
-			_SpriteSheetDrop = new Dropdownbar(150);
+			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
 			_SpriteSheetDrop.addEventListener("SpriteChange", onChangeSprite);
@@ -86,7 +92,6 @@ package
 		//	_drop.createList("test4");
 		//	_drop.createList("test5");
 			
-			
 			addChild(_display);
 			addChild(_loadeButton);
 			addChild(_animationButton);
@@ -94,6 +99,7 @@ package
 			addChild(_animaionText);
 			addChild(_imageText);
 			addChild(_animationMode);
+			addChild(_imageMode);
 			addChild(_SpriteSheetDrop);
 		}
 		
@@ -101,6 +107,7 @@ package
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
 			_display.viewSprite();
+			_imageMode.setSpriteSheet(_spriteSheets[Dropdownbar(event.currentTarget).currentList.name]);
 		}
 		
 		private function onChangeMode(event:Event):void
@@ -108,11 +115,13 @@ package
 			_display.mode = _radioManager.mode;
 			if(_display.mode == RadioState.ANIMATION)
 			{
+				_imageMode.visible = false;
 				_animationMode.visible = true;
 			}
 			else if(_display.mode == RadioState.IMAGE)
 			{
 				_animationMode.visible = false;
+				_imageMode.visible = true;
 			}
 			trace(_display.mode);
 		}
