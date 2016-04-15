@@ -4,6 +4,8 @@ package
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
@@ -29,6 +31,9 @@ package
 		private var _animationCounter:int;
 		private var _frameCounter:int;
 		
+	//	private var _imageWidth:int = _currentImage.width;
+	//	private var _imageHeight:int = _currentImage.height;
+		
 		public function Display(width:int, height:int)
 		{
 			_content = new Sprite();
@@ -47,6 +52,7 @@ package
 			_currentImage.width = 300;
 			_currentImage.height = 400;
 			_currentImage.visible = false;
+			_currentImage.addEventListener(TouchEvent.TOUCH, onClickImage);
 			
 			_currentAnimation = new Image(null);
 			_currentAnimation.pivotX = _currentAnimation.width / 2;
@@ -56,6 +62,7 @@ package
 			_currentAnimation.width = 300;
 			_currentAnimation.height = 400;
 			_currentAnimation.visible = false;
+		//	_currentAnimation.addEventListener(TouchEvent.TOUCH, onClickImage);
 			
 			_currentAnimationName = new TextField(120, 20, "");
 			_currentAnimationName.pivotX = _currentAnimationName.width / 2;
@@ -82,12 +89,12 @@ package
 			_animationCounter = 0;
 			
 			_currentImage.texture = null;
-		//	_currentImage.width = 1;
-		//	_currentImage.height = 1;
+			_currentImage.width = 1;
+			_currentImage.height = 1;
 			
 			_currentAnimation.texture = null;
-		//	_currentAnimation.width = 1;
-		//	_currentAnimation.height = 1;
+			_currentAnimation.width = 1;
+			_currentAnimation.height = 1;
 		}
 
 		public function get mode():String
@@ -149,11 +156,26 @@ package
 			}
 		}
 		
+		private function onClickImage(event:TouchEvent):void
+		{
+			if(event.getTouch(_currentImage, TouchPhase.BEGAN) != null)
+			{
+				_currentImage.width = 300;
+				_currentImage.height = 400;
+			}
+			
+			if(event.getTouch(_currentImage, TouchPhase.ENDED) != null)
+			{
+				_currentImage.width = getLocalWidth(_currentImage.texture.width);
+				_currentImage.height = getLocalHeight(_currentImage.texture.height);
+			}
+		}
+		
 		private function changeAnimation():void
 		{
 			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
-		//	_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
-		//	_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
+			_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
+			_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
 			_currentAnimationName.text = _spriteSheet.images[_animationCounter].name;
 			_animationCounter++;
 			if(_animationCounter >= _spriteSheet.images.length)
@@ -165,8 +187,8 @@ package
 		
 		public function viewImage(textureName:String):void
 		{
-		//	_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
-		//	_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
+			_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
 			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}
 		
