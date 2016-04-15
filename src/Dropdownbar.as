@@ -83,11 +83,7 @@ package
 		public function initList():void
 		{
 			_list = new Vector.<TextField>();
-		}
-		
-		public function set currentView(value:int):void
-		{
-			_currentView = value;
+			_selected = 0;
 		}
 
 		public function get currentViewList():TextField

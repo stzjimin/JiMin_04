@@ -87,11 +87,6 @@ package
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
 			_SpriteSheetDrop.addEventListener("ListChange", onChangeSprite);
-		//	_SpriteSheetDrop.createList("test1");
-		//	_SpriteSheetDrop.createList("test2");
-		//	_SpriteSheetDrop.createList("test3");
-		//	_drop.createList("test4");
-		//	_drop.createList("test5");
 			
 			addChild(_display);
 			addChild(_loadeButton);
@@ -112,7 +107,6 @@ package
 		private function onChangeSprite(event:Event):void
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
-		//	_display.viewSprite();
 			_display.viewImage(null);
 			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
 			_imageMode.imageSelectBar.currentViewList.text = ""

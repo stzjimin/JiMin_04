@@ -35,6 +35,8 @@ package
 			_currentImage.pivotY = _currentImage.height / 2;
 			_currentImage.x = _width / 2;
 			_currentImage.y = _height / 2;
+			_currentImage.width = 1;
+			_currentImage.height = 1;
 			_currentImage.visible = false;
 			
 			addChild(_backGround);
@@ -87,6 +89,11 @@ package
 			{
 				_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
 				_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			}
+			else
+			{
+				_currentImage.width = 1;
+				_currentImage.height = 1;
 			}
 			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}

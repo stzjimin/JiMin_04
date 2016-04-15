@@ -45,7 +45,6 @@ package
 			for(var i:int = 0; i < _spriteSheet.images.length; i++)
 				_imageSelectBar.createList(_spriteSheet.images[i].name);
 			_imageSelectBar.refreshList();
-			_imageSelectBar.currentView = 0;
 		}
 		
 		private function onChangeImage(event:Event):void
