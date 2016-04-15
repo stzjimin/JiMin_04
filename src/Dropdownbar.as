@@ -1,11 +1,11 @@
 package
 {
 	import flash.display.Bitmap;
-	import flash.utils.Dictionary;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
@@ -18,17 +18,21 @@ package
 		
 		private var _width:int;
 		private var _listHeight:int;
-		private var _listY:Number;
+		private var _listY:int;
 		
 		private var _dropButton:ButtonObject;
 		private var _currentList:TextField;
-		private var _currentSelected:int;
+		private var _selected:int;
+		private var _currentView:int;
 		
 		private var _backGround:Quad;
+		private var _upButton:ButtonObject;
+		private var _downButton:ButtonObject;
 		private var _content:Sprite;
 		
 		public function Dropdownbar(width:int)
 		{
+			_selected = 0;
 			_list = new Vector.<TextField>();
 			
 			_width = width;
@@ -48,10 +52,25 @@ package
 			_backGround.alpha = 0.5;
 			_backGround.color = Color.SILVER;
 			
+			_upButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap));
+			_upButton.width = _width / 5;
+			_upButton.height = 40;
+			_upButton.x = _width/5 * 4;
+			_upButton.addEventListener(Event.TRIGGERED, onClickUpButton);
+			
+			_downButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
+			_downButton.width = _width / 5;
+			_downButton.height = 40;
+			_downButton.x = _width/5 * 4;
+			_downButton.y = 40;
+			_downButton.addEventListener(Event.TRIGGERED, onClickDownButton);
+			
 			_content = new Sprite();
 			_content.y = 20;
 			_content.visible = false;
 			_content.addChild(_backGround);
+			_content.addChild(_upButton);
+			_content.addChild(_downButton);
 			
 			addChild(_currentList);
 			addChild(_dropButton);
@@ -63,37 +82,24 @@ package
 			_content.visible = !_content.visible;
 			if(_content.visible)
 			{
-			//	_content.addChild(_list[_currentSelected]);
+				_currentView = _selected;
 				for(var i:int = 0; i < 4; i++)
 				{
-					try
+					if((_list.length-1) >= _currentView+i)
 					{
-						_content.addChild(_list[_currentSelected+i]);
-						_list[_currentSelected+i].y += i*20;
-					}
-					catch(error:Error)
-					{
-						
+						_content.addChild(_list[_currentView+i]);
+						_list[_currentView+i].y += i*20;
 					}
 				}
-				trace("aa");
 			}
 			else
 			{
-				for(var j:int = 1; j < 5; j++)
+				for(var j:int = _content.numChildren-1; j > 2; j--)
 				{
-					try
-					{
-						_content.getChildAt(j).y -= (j-1)*20;
-						_content.removeChildAt(j);
-					}
-					catch(error:Error)
-					{
-						
-					}
+					trace(_content.getChildAt(j));
+					_content.getChildAt(j).y = _listY;
+					_content.removeChildAt(j);
 				}
-				trace("bb");
-			//	_currentSelected++;
 			}
 		}
 		
@@ -105,10 +111,21 @@ package
 			list.pivotX = list.width / 2;
 			list.pivotY = list.height / 2;
 			list.x += list.width / 2;
-			list.y = _listY / 2;
+			list.y = _listY;
 			list.addEventListener(TouchEvent.TOUCH, onClickList);
 			_list.push(list);
+		//	trace(_content.getChildIndex(list));
 		//	_content.addChild(list);
+		}
+		
+		private function onClickUpButton(event:Event):void
+		{
+			
+		}
+		
+		private function onClickDownButton(event:Event):void
+		{
+			
 		}
 		
 		private function onClickList(event:TouchEvent):void
@@ -122,8 +139,8 @@ package
 			if(event.getTouch(TextField(event.currentTarget), TouchPhase.ENDED) != null)
 			{
 				TextField(event.currentTarget).scale = 1.0;
-				trace(TextField(event.currentTarget).text);
-				_currentSelected = _content.getChildIndex(TextField(event.currentTarget));
+				trace(_content.getChildIndex(TextField(event.currentTarget)));
+				_selected = _list.indexOf(TextField(event.currentTarget));
 				_currentList = TextField(event.currentTarget);
 				togleVisible();
 			}
