@@ -3,6 +3,7 @@ package
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.utils.Color;
 
@@ -19,6 +20,9 @@ package
 		private var _height:int;
 		
 		private var _currentImage:Image;
+		private var _currentAnimation:Image;
+		
+		private var _animationCounter:int;
 		
 		public function Display(width:int, height:int)
 		{
@@ -32,16 +36,26 @@ package
 			
 			_currentImage = new Image(null);
 			_currentImage.pivotX = _currentImage.width / 2;
-			_currentImage.pivotY = _currentImage.height / 2;
+		 	_currentImage.pivotY = _currentImage.height / 2;
 			_currentImage.x = _width / 2;
 			_currentImage.y = _height / 2;
 			_currentImage.width = 1;
 			_currentImage.height = 1;
 			_currentImage.visible = false;
 			
+			_currentAnimation = new Image(null);
+			_currentAnimation.pivotX = _currentAnimation.width / 2;
+			_currentAnimation.pivotY = _currentAnimation.height / 2;
+			_currentAnimation.x = _width / 2;
+			_currentAnimation.y = _height / 2;
+			_currentAnimation.width = 1;
+			_currentAnimation.height = 1;
+			_currentAnimation.visible = false;
+			
 			addChild(_backGround);
 			addChild(_content);
 			_content.addChild(_currentImage);
+			_content.addChild(_currentAnimation);
 		}
 		
 		public function get spriteSheet():SpriteSheet
@@ -52,6 +66,7 @@ package
 		public function set spriteSheet(value:SpriteSheet):void
 		{
 			_spriteSheet = value;
+			_animationCounter = 0;
 		}
 
 		public function get mode():String
@@ -70,16 +85,42 @@ package
 			{
 				_mode = RadioState.ANIMATION;
 				_currentImage.visible = false;
+				_currentAnimation.visible = true;
 			}
 			else if(value == "Image" || value == "image" || value == "IMAGE")
 			{
 				_mode = RadioState.IMAGE;
+				_currentAnimation.visible = false;
 				_currentImage.visible = true;
 			}
 			else
 			{
 				_mode = RadioState.ANIMATION;
 				_currentImage.visible = false;
+				_currentAnimation.visible = true;
+			}
+		}
+		
+		public function startAnimation():void
+		{
+			if(_spriteSheet != null)
+			{
+			//	trace("aa");
+				_currentAnimation.addEventListener(Event.ENTER_FRAME, goAnimation);
+			}
+		}
+		
+		private function goAnimation(event:Event):void
+		{
+		//	trace("goAnimation");
+			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
+			_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
+			_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
+			_animationCounter++;
+			if(_animationCounter >= _spriteSheet.images.length)
+			{
+				_animationCounter = 0;
+				_currentAnimation.removeEventListener(Event.ENTER_FRAME, goAnimation);
 			}
 		}
 		

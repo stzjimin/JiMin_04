@@ -1,13 +1,14 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.net.FileFilter;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
 
 	public class ImageMode extends Sprite
-	{
+	{	
 		private var _imageSelectBar:Dropdownbar;
 		private var _imageAddButton:ButtonObject;
 		
@@ -49,14 +50,22 @@ package
 			_imageSelectBar.refreshList();
 		}
 		
-		private function onClickedAddButton(event:Event):void
-		{
-			
-		}
-		
 		private function onChangeImage(event:Event):void
 		{
 			dispatchEvent(new Event("ImageChange"));
+		}
+		
+		private function onClickedAddButton(event:Event):void
+		{
+			//	var pngFileFilter:FileFilter = new FileFilter("png","*.png");
+			var fileInput:FileInput = new FileInput();
+			var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
+			fileInput.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
+		}
+		
+		private function onLoadedImage(filePath:String):void
+		{
+			trace(filePath);
 		}
 	}
 }

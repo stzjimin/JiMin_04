@@ -72,6 +72,7 @@ package
 			_animationMode.x = 370;
 			_animationMode.y = 550;
 			_animationMode.visible = false;
+			_animationMode.addEventListener("StartAnimation", onStartAnimation);
 			
 			_imageMode = new ImageMode();
 			_imageMode.x = 370;
@@ -97,6 +98,11 @@ package
 			addChild(_animationMode);
 			addChild(_imageMode);
 			addChild(_SpriteSheetDrop);
+		}
+		
+		private function onStartAnimation(event:Event):void
+		{
+			_display.startAnimation();
 		}
 		
 		private function onChangeImage(event:Event):void

@@ -1,13 +1,15 @@
 package
 {
 	import flash.display.Bitmap;
-	import flash.utils.Dictionary;
 	
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.textures.Texture;
 
 	public class AnimationMode extends Sprite
 	{	
+		private var _spriteSheet:SpriteSheet;
+		
 		private var _startButton:ButtonObject;
 		private var _stopButton:ButtonObject;
 		private var _deleteButton:ButtonObject;
@@ -18,6 +20,7 @@ package
 			_startButton.width = 64;
 			_startButton.height = 64;
 			_startButton.x = 20;
+			_startButton.addEventListener(Event.TRIGGERED, onClickStartButton);
 		//	_startButton.y = 20;
 			
 			_stopButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["stop.png"] as Bitmap));
@@ -35,6 +38,11 @@ package
 			addChild(_startButton);
 			addChild(_stopButton);
 			addChild(_deleteButton);
+		}
+		
+		private function onClickStartButton(event:Event):void
+		{
+			dispatchEvent(new Event("StartAnimation"));
 		}
 	}
 }

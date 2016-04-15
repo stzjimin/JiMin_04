@@ -44,11 +44,6 @@ package
 			return _name;
 		}
 		
-		public function getTexture(name:String):void
-		{
-			return 
-		}
-		
 		private function loadSubTexture():void
 		{
 			_subTextures = new Dictionary();
