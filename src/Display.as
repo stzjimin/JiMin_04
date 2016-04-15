@@ -31,9 +31,6 @@ package
 		private var _animationCounter:int;
 		private var _frameCounter:int;
 		
-	//	private var _imageWidth:int = _currentImage.width;
-	//	private var _imageHeight:int = _currentImage.height;
-		
 		public function Display(width:int, height:int)
 		{
 			_content = new Sprite();
@@ -62,7 +59,6 @@ package
 			_currentAnimation.width = 300;
 			_currentAnimation.height = 400;
 			_currentAnimation.visible = false;
-		//	_currentAnimation.addEventListener(TouchEvent.TOUCH, onClickImage);
 			
 			_currentAnimationName = new TextField(120, 20, "");
 			_currentAnimationName.pivotX = _currentAnimationName.width / 2;

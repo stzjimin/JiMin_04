@@ -11,6 +11,7 @@ package
 	{	
 		private var _imageSelectBar:Dropdownbar;
 		private var _imageAddButton:ButtonObject;
+		private var _imageSaveButton:ButtonObject;
 		
 		private var _spriteSheet:SpriteSheet;
 		
@@ -26,9 +27,15 @@ package
 			_imageAddButton.x = 170;
 			_imageAddButton.addEventListener(Event.TRIGGERED, onClickedAddButton);
 			
+			_imageSaveButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["saveImage.png"] as Bitmap));
+			_imageSaveButton.width = 40;
+			_imageSaveButton.height = 40;
+			_imageSaveButton.x = 220;
+			_imageSaveButton.addEventListener(Event.TRIGGERED, onClickedSaveButton);
 			
 			addChild(_imageSelectBar);
 			addChild(_imageAddButton);
+			addChild(_imageSaveButton);
 		}
 		
 		public function set spriteSheet(value:SpriteSheet):void
@@ -64,6 +71,17 @@ package
 		}
 		
 		private function onLoadedImage(filePath:String):void
+		{
+			trace(filePath);
+		}
+		
+		private function onClickedSaveButton(event:Event):void
+		{
+			var fileOutput:FileOutput = new FileOutput();
+			fileOutput.saveFile("이미지 저장", onCompleteSave);
+		}
+		
+		private function onCompleteSave(filePath:String):void
 		{
 			trace(filePath);
 		}
