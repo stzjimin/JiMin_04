@@ -73,6 +73,7 @@ package
 			_animationMode.y = 550;
 			_animationMode.visible = false;
 			_animationMode.addEventListener("StartAnimation", onStartAnimation);
+			_animationMode.addEventListener("StopAnimation", onStopAnimation);
 			
 			_imageMode = new ImageMode();
 			_imageMode.x = 370;
@@ -100,6 +101,11 @@ package
 			addChild(_SpriteSheetDrop);
 		}
 		
+		private function onStopAnimation(event:Event):void
+		{
+			_display.stopAnimation();
+		}
+		
 		private function onStartAnimation(event:Event):void
 		{
 			_display.startAnimation();
@@ -113,7 +119,6 @@ package
 		private function onChangeSprite(event:Event):void
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
-			_display.viewImage(null);
 			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
 			_imageMode.imageSelectBar.currentViewList.text = ""
 			_imageMode.imageSelectBar.refreshList();
@@ -131,6 +136,7 @@ package
 			{
 				_animationMode.visible = false;
 				_imageMode.visible = true;
+				_display.stopAnimation();
 			}
 		//	trace(_display.mode);
 		}

@@ -27,6 +27,7 @@ package
 			_stopButton.width = 64;
 			_stopButton.height = 64;
 			_stopButton.x = 90;
+			_stopButton.addEventListener(Event.TRIGGERED, onClickStopButton);
 		//	_stopButton.y = 20;
 			
 			_deleteButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["delete.png"] as Bitmap));
@@ -43,6 +44,11 @@ package
 		private function onClickStartButton(event:Event):void
 		{
 			dispatchEvent(new Event("StartAnimation"));
+		}
+		
+		private function onClickStopButton(event:Event):void
+		{
+			dispatchEvent(new Event("StopAnimation"));
 		}
 	}
 }

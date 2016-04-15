@@ -4,6 +4,7 @@ package
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
 
@@ -23,6 +24,7 @@ package
 		
 		private var _currentImage:Image;
 		private var _currentAnimation:Image;
+		private var _currentAnimationName:TextField;
 		
 		private var _animationCounter:int;
 		private var _frameCounter:int;
@@ -42,8 +44,8 @@ package
 		 	_currentImage.pivotY = _currentImage.height / 2;
 			_currentImage.x = _width / 2;
 			_currentImage.y = _height / 2;
-			_currentImage.width = 1;
-			_currentImage.height = 1;
+			_currentImage.width = 300;
+			_currentImage.height = 400;
 			_currentImage.visible = false;
 			
 			_currentAnimation = new Image(null);
@@ -51,14 +53,22 @@ package
 			_currentAnimation.pivotY = _currentAnimation.height / 2;
 			_currentAnimation.x = _width / 2;
 			_currentAnimation.y = _height / 2;
-			_currentAnimation.width = 1;
-			_currentAnimation.height = 1;
+			_currentAnimation.width = 300;
+			_currentAnimation.height = 400;
 			_currentAnimation.visible = false;
+			
+			_currentAnimationName = new TextField(120, 20, "");
+			_currentAnimationName.pivotX = _currentAnimationName.width / 2;
+			_currentAnimationName.pivotY = _currentAnimationName.height / 2;
+			_currentAnimationName.x = _width/6 * 5;
+			_currentAnimationName.y = _height/6 * 5;
+			_currentAnimationName.visible = false;
 			
 			addChild(_backGround);
 			addChild(_content);
 			_content.addChild(_currentImage);
 			_content.addChild(_currentAnimation);
+			_content.addChild(_currentAnimationName);
 		}
 		
 		public function get spriteSheet():SpriteSheet
@@ -70,6 +80,14 @@ package
 		{
 			_spriteSheet = value;
 			_animationCounter = 0;
+			
+			_currentImage.texture = null;
+		//	_currentImage.width = 1;
+		//	_currentImage.height = 1;
+			
+			_currentAnimation.texture = null;
+		//	_currentAnimation.width = 1;
+		//	_currentAnimation.height = 1;
 		}
 
 		public function get mode():String
@@ -89,11 +107,13 @@ package
 				_mode = RadioState.ANIMATION;
 				_currentImage.visible = false;
 				_currentAnimation.visible = true;
+				_currentAnimationName.visible = true;
 			}
 			else if(value == "Image" || value == "image" || value == "IMAGE")
 			{
 				_mode = RadioState.IMAGE;
 				_currentAnimation.visible = false;
+				_currentAnimationName.visible = false;
 				_currentImage.visible = true;
 			}
 			else
@@ -101,7 +121,13 @@ package
 				_mode = RadioState.ANIMATION;
 				_currentImage.visible = false;
 				_currentAnimation.visible = true;
+				_currentAnimationName.visible = true;
 			}
+		}
+		
+		public function stopAnimation():void
+		{
+			_currentAnimation.removeEventListener(Event.ENTER_FRAME, goAnimation);
 		}
 		
 		public function startAnimation():void
@@ -125,10 +151,10 @@ package
 		
 		private function changeAnimation():void
 		{
-		//	trace("goAnimation");
 			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
-			_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
-			_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
+		//	_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
+		//	_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
+			_currentAnimationName.text = _spriteSheet.images[_animationCounter].name;
 			_animationCounter++;
 			if(_animationCounter >= _spriteSheet.images.length)
 			{
@@ -139,16 +165,8 @@ package
 		
 		public function viewImage(textureName:String):void
 		{
-			if(textureName != null)
-			{
-				_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
-				_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
-			}
-			else
-			{
-				_currentImage.width = 1;
-				_currentImage.height = 1;
-			}
+		//	_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
+		//	_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
 			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}
 		
