@@ -41,11 +41,12 @@ package
 			_listY = _listHeight / 2;
 			
 			_dropButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap));
-			_dropButton.width = _width / 5;
+			_dropButton.width = 20;
 			_dropButton.height = 20;
-			_dropButton.x = _width/5 * 4;
+			_dropButton.x = _width - 20;
+			_dropButton.addEventListener(Event.TRIGGERED, onClickDropdownbar);
 			
-			_currentList = new TextField(_width/5*4, 20, "");
+			_currentList = new TextField(_width-20, 20, "");
 			_currentList.border = true;
 			
 			_backGround = new Quad(width, 80);
@@ -53,15 +54,15 @@ package
 			_backGround.color = Color.SILVER;
 			
 			_upButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap));
-			_upButton.width = _width / 5;
+			_upButton.width = 20;
 			_upButton.height = 40;
-			_upButton.x = _width/5 * 4;
+			_upButton.x = _width-20;
 			_upButton.addEventListener(Event.TRIGGERED, onClickUpButton);
 			
 			_downButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
-			_downButton.width = _width / 5;
+			_downButton.width = 20;
 			_downButton.height = 40;
-			_downButton.x = _width/5 * 4;
+			_downButton.x = _width-20;
 			_downButton.y = 40;
 			_downButton.addEventListener(Event.TRIGGERED, onClickDownButton);
 			
@@ -77,35 +78,21 @@ package
 			addChild(_content);
 		}
 		
+		public function get currentList():TextField
+		{
+			return _currentList;
+		}
+
 		public function togleVisible():void
 		{
 			_content.visible = !_content.visible;
-			if(_content.visible)
-			{
-				_currentView = _selected;
-				for(var i:int = 0; i < 4; i++)
-				{
-					if((_list.length-1) >= _currentView+i)
-					{
-						_content.addChild(_list[_currentView+i]);
-						_list[_currentView+i].y += i*20;
-					}
-				}
-			}
-			else
-			{
-				for(var j:int = _content.numChildren-1; j > 2; j--)
-				{
-					trace(_content.getChildAt(j));
-					_content.getChildAt(j).y = _listY;
-					_content.removeChildAt(j);
-				}
-			}
+			_currentView = _selected;
+			refreshList();
 		}
 		
 		public function createList(name:String):void
 		{
-			var list:TextField = new TextField(_width/5*4, _listHeight, name);
+			var list:TextField = new TextField(_width-20, _listHeight, name);
 			list.name = name;
 			list.border = true;
 			list.pivotX = list.width / 2;
@@ -118,14 +105,45 @@ package
 		//	_content.addChild(list);
 		}
 		
+		private function onClickDropdownbar(event:Event):void
+		{
+			togleVisible();
+		}
+		
+		private function refreshList():void
+		{
+			for(var j:int = _content.numChildren-1; j > 2; j--)
+			{
+				//	trace(_content.getChildAt(j));
+				_content.getChildAt(j).y = _listY;
+				_content.removeChildAt(j);
+			}
+			
+			if(_content.visible)
+			{
+				for(var i:int = 0; i < 4; i++)
+				{
+					if((_list.length-1) >= _currentView+i)
+					{
+						_content.addChild(_list[_currentView+i]);
+						_list[_currentView+i].y += i*20;
+					}
+				}
+			}
+		}
+		
 		private function onClickUpButton(event:Event):void
 		{
-			
+			if(_currentView > 0)
+				_currentView--;
+			refreshList();
 		}
 		
 		private function onClickDownButton(event:Event):void
 		{
-			
+			if((_list.length-1) > _currentView)
+				_currentView++;
+			refreshList();
 		}
 		
 		private function onClickList(event:TouchEvent):void
@@ -139,10 +157,11 @@ package
 			if(event.getTouch(TextField(event.currentTarget), TouchPhase.ENDED) != null)
 			{
 				TextField(event.currentTarget).scale = 1.0;
-				trace(_content.getChildIndex(TextField(event.currentTarget)));
+				trace(TextField(event.currentTarget).name);
 				_selected = _list.indexOf(TextField(event.currentTarget));
 				_currentList = TextField(event.currentTarget);
 				togleVisible();
+				dispatchEvent(new Event("SpriteChange"));
 			}
 		}
 	}

@@ -75,7 +75,7 @@ package
 			event.currentTarget.removeEventListener("complete", onCompleteXmlLoad);
 			//	trace(textureAtlas.getFrame("iu3").x + ", " + textureAtlas.getFrame("iu3").y + ", " + textureAtlas.getFrame("iu3").width + ", " + textureAtlas.getFrame("iu3").height);
 			//	trace(textureAtlas.getRegion("iu3"));
-			_completeFunc(_name, _spriteSheet, _xml);
+			_completeFunc(_xml.attribute("ImagePath"), _spriteSheet, _xml);
 		}
 	}
 }

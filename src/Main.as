@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.utils.Dictionary;
 	
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -12,7 +13,7 @@ package
 	{
 		private var _resourceLoader:ResourceLoader;
 		
-		private var _spriteSheets:Vector.<SpriteSheet> = new Vector.<SpriteSheet>();
+		private var _spriteSheets:Dictionary = new Dictionary();
 		
 		private var _loadeButton:ButtonObject;
 		private var _display:Display;
@@ -23,7 +24,7 @@ package
 		private var _animaionText:TextField;
 		private var _imageText:TextField;
 		private var _animationMode:AnimationMode;
-		private var _drop:Dropdownbar;
+		private var _SpriteSheetDrop:Dropdownbar;
 		
 		public function Main()
 		{
@@ -38,34 +39,36 @@ package
 			_radioManager.addEventListener("ModeChange",onChangeMode);
 			
 			_animaionText = new TextField(100, 20, "Animation");
-			_animaionText.x = 150;
+			_animaionText.border = true;
+			_animaionText.x = 200;
 			_animaionText.y = 550;
 			
 			_imageText = new TextField(100, 20, "Image");
-			_imageText.x = 150;
+			_imageText.border = true;
+			_imageText.x = 200;
 			_imageText.y = 580;
 			
 			_animationButton = _radioManager.createButton(RadioState.ANIMATION);
 			_animationButton.width = 20;
 			_animationButton.height = 20;
-			_animationButton.x = 120;
+			_animationButton.x = 180;
 			_animationButton.y = 550;
 			
 			_imageButton = _radioManager.createButton(RadioState.IMAGE);
 			_imageButton.width = 20;
 			_imageButton.height = 20;
-			_imageButton.x = 120;
+			_imageButton.x = 180;
 			_imageButton.y = 580;
 			
 			_loadeButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
 			_loadeButton.height = 40;
 			_loadeButton.x = 30;
-			_loadeButton.y = 550;
+			_loadeButton.y = 540;
 			_loadeButton.addEventListener(Event.TRIGGERED, onClickLoadButton);
 			
 			_animationMode = new AnimationMode();
-			_animationMode.x = 300;
+			_animationMode.x = 370;
 			_animationMode.y = 550;
 			_animationMode.visible = false;
 			
@@ -73,26 +76,15 @@ package
 			_display.x = 25;
 			_display.y = 25;
 			
-			/*
-			_displayBound = new Quad(_display.width, _display.height);
-			_displayBound.x = 25;
-			_displayBound.y = 25;
-			_displayBound.color = Color.GRAY;
-			_displayBound.scale = 1.1;
-				
-			addChild(_displayBound);
-			*/
-			
-			_drop = new Dropdownbar(100);
-			_drop.x = 300;
-			_drop.y = 550;
-			_drop.visible = false;
-			_drop.addEventListener(Event.TRIGGERED, onClickDropdownbar);
-			_drop.createList("test1");
-			_drop.createList("test2");
-			_drop.createList("test3");
-			_drop.createList("test4");
-			_drop.createList("test5");
+			_SpriteSheetDrop = new Dropdownbar(150);
+			_SpriteSheetDrop.x = 10;
+			_SpriteSheetDrop.y = 590;
+			_SpriteSheetDrop.addEventListener("SpriteChange", onChangeSprite);
+		//	_SpriteSheetDrop.createList("test1");
+		//	_SpriteSheetDrop.createList("test2");
+		//	_SpriteSheetDrop.createList("test3");
+		//	_drop.createList("test4");
+		//	_drop.createList("test5");
 			
 			
 			addChild(_display);
@@ -102,7 +94,13 @@ package
 			addChild(_animaionText);
 			addChild(_imageText);
 			addChild(_animationMode);
-			addChild(_drop);
+			addChild(_SpriteSheetDrop);
+		}
+		
+		private function onChangeSprite(event:Event):void
+		{
+			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
+			_display.viewSprite();
 		}
 		
 		private function onChangeMode(event:Event):void
@@ -111,23 +109,13 @@ package
 			if(_display.mode == RadioState.ANIMATION)
 			{
 				_animationMode.visible = true;
-				_drop.visible = false;
 			}
 			else if(_display.mode == RadioState.IMAGE)
 			{
-				_drop.visible = true;
 				_animationMode.visible = false;
 			}
 			trace(_display.mode);
 		}
-		
-		
-		private function onClickDropdownbar(event:Event):void
-		{
-			_drop.togleVisible();
-		//	trace("bbb");
-		}
-		
 		
 		private function onClickLoadButton(event:Event):void
 		{
@@ -141,7 +129,7 @@ package
 		//	var testImage:Image = new Image(Texture.fromBitmap(loadSprite));
 		//	addChild(testImage);
 			var spriteSheet:SpriteSheet = new SpriteSheet(name, loadSprite, loadXml);
-			_spriteSheets.push(spriteSheet);
+			_spriteSheets[name] = spriteSheet;
 		//	addChild(_spriteSheets[0].spriteBitmap);
 		//	var testImage:Image = new Image(Texture.fromBitmap(_spriteSheets[0].spriteBitmap));
 		//	addChild(testImage);
@@ -150,8 +138,9 @@ package
 		//	trace(loadXml);
 		//	trace(loadXml.child("SubTexture").name());
 		//	trace(loadXml.child("SubTexture")[0].attribute("name"));
-			_display.spriteSheet = _spriteSheets[0];
-			_display.viewSprite();
+		//	_display.spriteSheet = _spriteSheets[name];
+		//	_display.viewSprite();
+			_SpriteSheetDrop.createList(name);
 		}
 	}
 }
