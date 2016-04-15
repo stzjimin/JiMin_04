@@ -28,22 +28,24 @@ package
 			addChild(_imageAddButton);
 		}
 		
+		public function set spriteSheet(value:SpriteSheet):void
+		{
+			_spriteSheet = value;
+			setImages();
+		}
+
 		public function get imageSelectBar():Dropdownbar
 		{
 			return _imageSelectBar;
 		}
-
-		public function setSpriteSheet(spriteSheet:SpriteSheet):void
-		{
-			_spriteSheet = spriteSheet;
-		//	trace(_spriteSheet.name);
-			setImages();
-		}
 		
 		private function setImages():void
 		{
+			_imageSelectBar.initList();
 			for(var i:int = 0; i < _spriteSheet.images.length; i++)
 				_imageSelectBar.createList(_spriteSheet.images[i].name);
+			_imageSelectBar.refreshList();
+			_imageSelectBar.currentView = 0;
 		}
 		
 		private function onChangeImage(event:Event):void

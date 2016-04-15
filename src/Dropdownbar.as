@@ -20,6 +20,8 @@ package
 		private var _listHeight:int;
 		private var _listY:int;
 		
+		private var _currentViewList:TextField;
+		
 		private var _dropButton:ButtonObject;
 		private var _currentList:TextField;
 		private var _selected:int;
@@ -46,8 +48,8 @@ package
 			_dropButton.x = _width - 20;
 			_dropButton.addEventListener(Event.TRIGGERED, onClickDropdownbar);
 			
-			_currentList = new TextField(_width-20, 20, "");
-			_currentList.border = true;
+			_currentViewList = new TextField(_width-20, 20, "");
+			_currentViewList.border = true;
 			
 			_backGround = new Quad(width, 80);
 			_backGround.alpha = 0.5;
@@ -73,11 +75,26 @@ package
 			_content.addChild(_upButton);
 			_content.addChild(_downButton);
 			
-			addChild(_currentList);
+			addChild(_currentViewList);
 			addChild(_dropButton);
 			addChild(_content);
 		}
 		
+		public function initList():void
+		{
+			_list = new Vector.<TextField>();
+		}
+		
+		public function set currentView(value:int):void
+		{
+			_currentView = value;
+		}
+
+		public function get currentViewList():TextField
+		{
+			return _currentViewList;
+		}
+
 		public function get currentList():TextField
 		{
 			return _currentList;
@@ -157,10 +174,11 @@ package
 			if(event.getTouch(TextField(event.currentTarget), TouchPhase.ENDED) != null)
 			{
 				TextField(event.currentTarget).scale = 1.0;
-				trace(TextField(event.currentTarget).name);
+			//	trace(TextField(event.currentTarget).name);
 				_selected = _list.indexOf(TextField(event.currentTarget));
 				_currentList = TextField(event.currentTarget);
 				togleVisible();
+				_currentViewList.text = TextField(event.currentTarget).text;
 				dispatchEvent(new Event("ListChange"));
 			}
 		}

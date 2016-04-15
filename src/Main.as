@@ -113,7 +113,10 @@ package
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
 		//	_display.viewSprite();
-			_imageMode.setSpriteSheet(_spriteSheets[Dropdownbar(event.currentTarget).currentList.name]);
+			_display.viewImage(null);
+			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
+			_imageMode.imageSelectBar.currentViewList.text = ""
+			_imageMode.imageSelectBar.refreshList();
 		}
 		
 		private function onChangeMode(event:Event):void
@@ -129,7 +132,7 @@ package
 				_animationMode.visible = false;
 				_imageMode.visible = true;
 			}
-			trace(_display.mode);
+		//	trace(_display.mode);
 		}
 		
 		private function onClickLoadButton(event:Event):void

@@ -14,7 +14,6 @@ package
 		private var _mode:String = RadioState.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
 		private var _spriteTexture:Texture;
-	//	private var _spriteImage:Image;
 		
 		private var _width:int;
 		private var _height:int;
@@ -24,7 +23,6 @@ package
 		public function Display(width:int, height:int)
 		{
 			_content = new Sprite();
-		//	_content.scaleX = _content.scaleY = 1.0;
 			
 			_width = width;
 			_height = height;
@@ -37,16 +35,11 @@ package
 			_currentImage.pivotY = _currentImage.height / 2;
 			_currentImage.x = _width / 2;
 			_currentImage.y = _height / 2;
+			_currentImage.visible = false;
 			
-		//	_backGround.scale = 1.1;
-		//	trace(this.width);
-		//	_content.width = 650;
-		//	_content.height = 500;
-		//	trace(_content.width);
 			addChild(_backGround);
 			addChild(_content);
 			_content.addChild(_currentImage);
-			trace(_content.width);
 		}
 		
 		public function get spriteSheet():SpriteSheet
@@ -57,7 +50,6 @@ package
 		public function set spriteSheet(value:SpriteSheet):void
 		{
 			_spriteSheet = value;
-			_spriteTexture = Texture.fromBitmap(value.spriteBitmap);
 		}
 
 		public function get mode():String
@@ -73,17 +65,29 @@ package
 		public function set mode(value:String):void
 		{
 			if(value == "Animation" || value == "animation" || value == "ANIMATION")
+			{
 				_mode = RadioState.ANIMATION;
+				_currentImage.visible = false;
+			}
 			else if(value == "Image" || value == "image" || value == "IMAGE")
+			{
 				_mode = RadioState.IMAGE;
+				_currentImage.visible = true;
+			}
 			else
+			{
 				_mode = RadioState.ANIMATION;
+				_currentImage.visible = false;
+			}
 		}
 		
 		public function viewImage(textureName:String):void
 		{
-			_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
-			_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			if(textureName != null)
+			{
+				_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
+				_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			}
 			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}
 		
