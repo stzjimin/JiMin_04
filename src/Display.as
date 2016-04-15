@@ -14,10 +14,12 @@ package
 		private var _mode:String = RadioState.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
 		private var _spriteTexture:Texture;
-		private var _spriteImage:Image;
+	//	private var _spriteImage:Image;
 		
 		private var _width:int;
 		private var _height:int;
+		
+		private var _currentImage:Image;
 		
 		public function Display(width:int, height:int)
 		{
@@ -30,6 +32,12 @@ package
 			_backGround = new Quad(width, height);
 			_backGround.color = Color.SILVER;
 			
+			_currentImage = new Image(null);
+			_currentImage.pivotX = _currentImage.width / 2;
+			_currentImage.pivotY = _currentImage.height / 2;
+			_currentImage.x = _width / 2;
+			_currentImage.y = _height / 2;
+			
 		//	_backGround.scale = 1.1;
 		//	trace(this.width);
 		//	_content.width = 650;
@@ -37,6 +45,7 @@ package
 		//	trace(_content.width);
 			addChild(_backGround);
 			addChild(_content);
+			_content.addChild(_currentImage);
 			trace(_content.width);
 		}
 		
@@ -71,28 +80,11 @@ package
 				_mode = RadioState.ANIMATION;
 		}
 		
-		public function viewSprite():void
+		public function viewImage(textureName:String):void
 		{
-		//	_spriteImage = new Image(_spriteTexture);
-		//	_spriteImage.width = 540;
-		//	_spriteImage.height = 890;
-			var testImage:Image = new Image(_spriteSheet.subTextures["iu3"]);
-		//	trace(testImage.width);
-		//	var testImage:Image = new Image(Texture.fromBitmap(_spriteSheet.spriteBitmap));
-			var testImage2:Image = new Image(_spriteSheet.subTextures["iu2"]);
-		//	trace(_spriteSheet.subTextures["iu3"]);
-			
-			testImage.width = getLocalWidth(testImage.width);
-			testImage.height = getLocalHeight(testImage.height);
-			
-			testImage2.width = getLocalWidth(testImage2.width);
-			testImage2.height = getLocalHeight(testImage2.height);
-			
-		//	testImage2.width = (testImage2.width/100)*_width;
-		//	testImage2.height = (testImage2.height/100)*_height;
-			
-			_content.addChild(testImage);
-			_content.addChild(testImage2);
+			_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
+			_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}
 		
 		private function getLocalWidth(width:Number):Number

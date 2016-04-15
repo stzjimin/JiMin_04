@@ -77,6 +77,7 @@ package
 			_imageMode.x = 370;
 			_imageMode.y = 550;
 			_imageMode.visible = false;
+			_imageMode.addEventListener("ImageChange", onChangeImage);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -85,7 +86,7 @@ package
 			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
-			_SpriteSheetDrop.addEventListener("SpriteChange", onChangeSprite);
+			_SpriteSheetDrop.addEventListener("ListChange", onChangeSprite);
 		//	_SpriteSheetDrop.createList("test1");
 		//	_SpriteSheetDrop.createList("test2");
 		//	_SpriteSheetDrop.createList("test3");
@@ -103,10 +104,15 @@ package
 			addChild(_SpriteSheetDrop);
 		}
 		
+		private function onChangeImage(event:Event):void
+		{
+			_display.viewImage(_imageMode.imageSelectBar.currentList.name);
+		}
+		
 		private function onChangeSprite(event:Event):void
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
-			_display.viewSprite();
+		//	_display.viewSprite();
 			_imageMode.setSpriteSheet(_spriteSheets[Dropdownbar(event.currentTarget).currentList.name]);
 		}
 		

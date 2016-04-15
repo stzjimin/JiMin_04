@@ -161,7 +161,7 @@ package
 				_selected = _list.indexOf(TextField(event.currentTarget));
 				_currentList = TextField(event.currentTarget);
 				togleVisible();
-				dispatchEvent(new Event("SpriteChange"));
+				dispatchEvent(new Event("ListChange"));
 			}
 		}
 	}
