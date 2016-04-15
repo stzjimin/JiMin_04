@@ -23,6 +23,8 @@ package
 			_imageAddButton.width = 40;
 			_imageAddButton.height = 40;
 			_imageAddButton.x = 170;
+			_imageAddButton.addEventListener(Event.TRIGGERED, onClickedAddButton);
+			
 			
 			addChild(_imageSelectBar);
 			addChild(_imageAddButton);
@@ -45,6 +47,11 @@ package
 			for(var i:int = 0; i < _spriteSheet.images.length; i++)
 				_imageSelectBar.createList(_spriteSheet.images[i].name);
 			_imageSelectBar.refreshList();
+		}
+		
+		private function onClickedAddButton(event:Event):void
+		{
+			
 		}
 		
 		private function onChangeImage(event:Event):void
