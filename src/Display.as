@@ -8,7 +8,9 @@ package
 	import starling.utils.Color;
 
 	public class Display extends Sprite
-	{		
+	{
+		private const AnimationFram:int = 30;
+		
 		private var _content:Sprite;
 		private var _backGround:Quad;
 		
@@ -23,6 +25,7 @@ package
 		private var _currentAnimation:Image;
 		
 		private var _animationCounter:int;
+		private var _frameCounter:int;
 		
 		public function Display(width:int, height:int)
 		{
@@ -105,12 +108,22 @@ package
 		{
 			if(_spriteSheet != null)
 			{
-			//	trace("aa");
+				_frameCounter = 0;
 				_currentAnimation.addEventListener(Event.ENTER_FRAME, goAnimation);
 			}
 		}
 		
 		private function goAnimation(event:Event):void
+		{
+			_frameCounter++;
+			if(_frameCounter >= AnimationFram)
+			{
+				changeAnimation();
+				_frameCounter = 0;
+			}
+		}
+		
+		private function changeAnimation():void
 		{
 		//	trace("goAnimation");
 			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
