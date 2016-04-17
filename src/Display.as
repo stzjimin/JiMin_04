@@ -152,6 +152,20 @@ package
 			}
 		}
 		
+		private function changeAnimation():void
+		{
+			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
+			_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
+			_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
+			_currentAnimationName.text = _spriteSheet.images[_animationCounter].name;
+			_animationCounter++;
+			if(_animationCounter >= _spriteSheet.images.length)
+			{
+				_animationCounter = 0;
+				_currentAnimation.removeEventListener(Event.ENTER_FRAME, goAnimation);
+			}
+		}
+		
 		private function onClickImage(event:TouchEvent):void
 		{
 			if(event.getTouch(_currentImage, TouchPhase.BEGAN) != null)
@@ -164,20 +178,6 @@ package
 			{
 				_currentImage.width = getLocalWidth(_currentImage.texture.width);
 				_currentImage.height = getLocalHeight(_currentImage.texture.height);
-			}
-		}
-		
-		private function changeAnimation():void
-		{
-			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
-			_currentAnimation.width = getLocalWidth(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].width);
-			_currentAnimation.height = getLocalHeight(_spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name].height);
-			_currentAnimationName.text = _spriteSheet.images[_animationCounter].name;
-			_animationCounter++;
-			if(_animationCounter >= _spriteSheet.images.length)
-			{
-				_animationCounter = 0;
-				_currentAnimation.removeEventListener(Event.ENTER_FRAME, goAnimation);
 			}
 		}
 		

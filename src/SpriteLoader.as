@@ -19,14 +19,14 @@ package
 		
 		private var _textureAtlas:TextureAtlas;
 		private var _completeFunc:Function;
-		private var _fileInput:FileInput;
+		private var _fileManager:FileIOManager;
 		
 		public function SpriteLoader(completeFunc:Function)
 		{
 			_completeFunc = completeFunc;
-			_fileInput = new FileInput();
+			_fileManager = new FileIOManager();
 			var pngFileFilter:FileFilter = new FileFilter("png","*.png");
-			_fileInput.selectFile("스프라이트시트 오픈", pngFileFilter, onInputPNG);
+			_fileManager.selectFile("스프라이트시트 오픈", pngFileFilter, onInputPNG);
 		}
 		
 		public function get textureAtlas():TextureAtlas
@@ -51,7 +51,6 @@ package
 			_name = _spritePath.replace(".png");
 			
 			var urlRequest:URLRequest = new URLRequest(_spritePath.replace("png","xml"));
-			trace(urlRequest.url);
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener("complete", onCompleteXmlLoad);
 			xmlLoader.load(urlRequest);

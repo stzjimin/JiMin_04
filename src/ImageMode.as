@@ -65,9 +65,9 @@ package
 		private function onClickedAddButton(event:Event):void
 		{
 			//	var pngFileFilter:FileFilter = new FileFilter("png","*.png");
-			var fileInput:FileInput = new FileInput();
+			var fileManager:FileIOManager = new FileIOManager();
 			var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
-			fileInput.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
+			fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
 		}
 		
 		private function onLoadedImage(filePath:String):void
@@ -77,8 +77,8 @@ package
 		
 		private function onClickedSaveButton(event:Event):void
 		{
-			var fileOutput:FileOutput = new FileOutput();
-			fileOutput.saveFile("이미지 저장", onCompleteSave);
+			var fileManager:FileIOManager = new FileIOManager();
+			fileManager.saveFile("이미지 저장", onCompleteSave);
 		}
 		
 		private function onCompleteSave(filePath:String):void

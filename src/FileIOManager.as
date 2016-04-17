@@ -4,26 +4,39 @@ package
 	import flash.filesystem.File;
 	import flash.net.FileFilter;
 
-	public class FileInput
+	public class FileIOManager
 	{
 		private var _file:File = new File();
 		private var _completeFunc:Function;
 		
-		public function FileInput()
+		public function FileIOManager()
 		{
 			_file = File.documentsDirectory;
-			_file.addEventListener(Event.SELECT, onClickInputSelectButton);
 		}
 		
 		public function selectFile(title:String ,fileFilter:FileFilter, completeFunc:Function):void
 		{
+			_file.addEventListener(Event.SELECT, onClickInputSelectButton);
 			_completeFunc = completeFunc;
 			_file.browseForOpen(title,[fileFilter]);
+		}
+		
+		public function saveFile(title:String, completeFunc:Function):void
+		{
+			_file.addEventListener(Event.SELECT, onClickOutputSelectButton);
+			_completeFunc = completeFunc;
+			_file.browseForSave(title);
 		}
 		
 		private function onClickInputSelectButton(event:flash.events.Event):void
 		{
 			_file.removeEventListener(flash.events.Event.SELECT, onClickInputSelectButton);
+			_completeFunc(_file.nativePath);
+		}
+		
+		private function onClickOutputSelectButton(event:flash.events.Event):void
+		{
+			_file.removeEventListener(flash.events.Event.SELECT, onClickOutputSelectButton);
 			_completeFunc(_file.nativePath);
 		}
 	}

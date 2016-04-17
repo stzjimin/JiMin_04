@@ -82,6 +82,11 @@ package
 		
 		public function initList():void
 		{
+			for(var i:int = 0; i < _list.length; i++)
+			{
+				_list[i].removeEventListener(TouchEvent.TOUCH, onClickList);
+				_list[i] = null;
+			}
 			_list = new Vector.<TextField>();
 			_selected = 0;
 		}
