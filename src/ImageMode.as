@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Loader;
 	import flash.display.PNGEncoderOptions;
 	import flash.filesystem.File;
@@ -8,7 +9,6 @@ package
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
-	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
 	import starling.display.Sprite;
@@ -80,23 +80,42 @@ package
 			fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
 		}
 		
-		private function onLoadedImage(filePath:String):void
+		private function onLoadedImage(filePath:String, fileName:String):void
 		{
 			var imageLoader:ImageLoader = new ImageLoader(onComleteLoad);
-			imageLoader.startImageLoad(filePath);
+			imageLoader.startImageLoad(filePath, fileName);
+			trace(fileName);
 		}
 		
-		private function onComleteLoad(bitmap:Bitmap):void
+		private function onComleteLoad(bitmap:Bitmap, imageInfo:ImageInfo):void
 		{
-			trace("aa");
-			var spacePixel:int = 0;
-			for(var i:int = 0; i < _spriteSheet.images.length; i++)
-				spacePixel += _spriteSheet.images[i].width*_spriteSheet.images[i].height;
-			var imagePixel:int = bitmap.width * bitmap.height;
-			if(spacePixel >= imagePixel)
+			var packer:Packer = new Packer();
+			packer.initPacker(_spriteSheet);
+			
+			if(packer.addImage(bitmap, imageInfo))
 			{
-				//packer
+			//	trace(bitmapData.width + ", " + bitmapData.height);
+				/*
+				var byteArray:ByteArray = new ByteArray();
+				var rect:Rectangle = new Rectangle(0, 0, 1024, 1024);
+				bitmapData.encode(rect, new PNGEncoderOptions(), byteArray);
+				var localPngFile:File = File.documentsDirectory.resolvePath("test.png");
+				var fileAccess:FileStream = new FileStream();
+				fileAccess.open(localPngFile, FileMode.WRITE);
+				fileAccess.writeBytes(byteArray, 0, byteArray.length);
+				fileAccess.close();
+				*/
+				completePacking(packer.currentPackedData);
 			}
+			else
+			{
+				trace("hahaha");
+			}
+		}
+		
+		private function completePacking(packedData:PackedData):void
+		{
+			trace(packedData.name);
 		}
 		
 		private function onClickedSaveButton(event:Event):void

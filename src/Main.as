@@ -83,6 +83,7 @@ package
 			_imageMode.visible = false;
 			_imageMode.addEventListener("ImageChange", onChangeImage);
 			_imageMode.addEventListener("CompleteSave", onCompleteSave);
+	//		_imageMode.addEventListener("Test", test);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;

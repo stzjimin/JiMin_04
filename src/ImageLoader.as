@@ -8,14 +8,16 @@ package
 	public class ImageLoader
 	{
 		private var _completeFunc:Function;
+		private var _name:String;
 		
 		public function ImageLoader(completeFunc:Function)
 		{
 			_completeFunc = completeFunc;
 		}
 		
-		public function startImageLoad(filePath:String):void
+		public function startImageLoad(filePath:String, fileName:String):void
 		{
+			_name = fileName;
 			var urlRequest:URLRequest = new URLRequest(filePath);
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteImageLoad);
@@ -27,7 +29,14 @@ package
 		{
 			var bitmap:Bitmap = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteImageLoad);
-			_completeFunc(bitmap);
+			var imageInfo:ImageInfo = new ImageInfo();
+			imageInfo.name = _name;
+			trace(imageInfo.name);
+			imageInfo.x = bitmap.x;
+			imageInfo.y = bitmap.y;
+			imageInfo.width = bitmap.width;
+			imageInfo.height = bitmap.height;
+			_completeFunc(bitmap, imageInfo);
 		}
 	}
 }

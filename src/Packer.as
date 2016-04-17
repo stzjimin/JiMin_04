@@ -1,9 +1,9 @@
 package
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
 
 	public class Packer
 	{
@@ -11,24 +11,28 @@ package
 		private const MaxHeight:int = 1024;
 		
 		private var _dataQueue:Vector.<ImageInfo>;
-		private var _currentPackedData:PackedData;
-		private var _spriteSheet:BitmapData;
+		private var _sheetBitmapData:BitmapData;
 		
-		private var _completeFunc:Function;
+		private var _currentPackedData:PackedData;
 		
 		private var _count:int;
 		private var _spaceArray:Vector.<Rectangle>;
 		
-		public function Packer(completeFunc:Function)
+		public function Packer()
 		{
-			_completeFunc = completeFunc;
+			
 		}
 		
-		public function initPacker(dataVector:Vector.<ImageInfo>):void
+		public function get currentPackedData():PackedData
 		{
-		//	_currentPackedData = new BitmapData(MaxWidth, MaxHeight);
-			_dataQueue = clone(dataVector);
-			_dataQueue = _dataQueue.sort(orderPixels);
+			return _currentPackedData;
+		}
+
+		public function initPacker(spriteSheet:SpriteSheet):void
+		{
+			_currentPackedData = new PackedData(spriteSheet.name, MaxWidth, MaxHeight);
+			_dataQueue = clone(spriteSheet.images);
+			_sheetBitmapData = spriteSheet.spriteBitmap.bitmapData;
 			
 			_count = 0;
 			_spaceArray = new Vector.<Rectangle>();
@@ -37,58 +41,111 @@ package
 			_spaceArray.push(firstRect);
 		}
 		
-		public function startPacker(spriteSheetBitmapData:BitmapData):void
+		public function addImage(addBitmap:Bitmap, addImageInfo):Boolean
 		{
-			_spriteSheet = spriteSheetBitmapData;
+			_dataQueue.push(addImageInfo);
+			_dataQueue = _dataQueue.sort(orderPixels);
+			while(_dataQueue.length != 0)
+			{
+				var image:ImageInfo = _dataQueue.shift();
+				var nonFlag:Boolean = true;
+				trace(_spaceArray.length);
+				for(var i:int = 0; i < _spaceArray.length; i++)
+				{
+					if(_spaceArray[i].containsRect(new Rectangle(_spaceArray[i].x, _spaceArray[i].y, image.width, image.height)))
+					{
+						var point:Point = new Point(_spaceArray[i].x, _spaceArray[i].y);
+						var imageRect:Rectangle = new Rectangle(image.x, image.y, image.width, image.height);
+						trace(image.name + " = " + image.x + ", " + image.y + ", " + image.width + ", " + image.height);
+						if(addImageInfo.name != image.name)
+							_currentPackedData.bitmapData.copyPixels(_sheetBitmapData, imageRect, point);
+						else
+							_currentPackedData.bitmapData.copyPixels(addBitmap.bitmapData, imageRect, point);
+						_currentPackedData.packedImageQueue.push(image);
+						imageRect.x = point.x;
+						imageRect.y = point.y;
+						trace(imageRect.x + ", " + imageRect.y + ", " + imageRect.width + ", " + imageRect.height);
+						searchIntersects(_spaceArray, imageRect);
+						
+						nonFlag = false;
+						break;
+					}
+				}
+				
+				//추가하려는 이미지가  들어갈 수 있는 공간이 없을 경우
+				if(nonFlag)
+				{
+					return false;
+				}
+				
+				_spaceArray.sort(orderYvalue);	//여유공간을  y값으로 정렬하여 상대적으로 아래쪽에 있는 공간은 나중에 선택이 되도록 합니다
+			}
+			return true;
 		}
 		
-		/*
-		private function addImage():void
+		private function orderYvalue(space1:Rectangle, space2:Rectangle):int
 		{
-			var image:ImageInfo = _dataQueue.shift();
-			var nonFlag:Boolean = true;
-			for(var i:int = 0; i < _spaceArray.length; i++)
+			if(space1.y < space2.y) 
+			{ 
+				return -1;
+			} 
+			else if(space1.y > space2.y)
+			{ 
+				return 1; 
+			} 
+			else 
+			{ 
+				return 0; 
+			} 
+		}
+		
+		private function searchIntersects(spaceArray:Vector.<Rectangle>, imageRect:Rectangle):void
+		{
+			for(var i:int = spaceArray.length-1; i >= 0; i--)
 			{
-				if(_spaceArray[i].containsRect(new Rectangle(_spaceArray[i].x, _spaceArray[i].y, image.width, image.height)))
+				if(spaceArray[i].intersects(imageRect))
 				{
-					var point:Point = new Point(_spaceArray[i].x, _spaceArray[i].y);
-					var imageRect:Rectangle = new Rectangle(image.x, image.y, image.width, image.height);
+					var inter:Rectangle = spaceArray[i].intersection(imageRect);
+					var rect:Rectangle = spaceArray.removeAt(i);
 					
-					image.x = imageRect.x = _spaceArray[i].x;
-					image.y = imageRect.y = _spaceArray[i].y;
-					
-					_currentPackedDatamerge(image.bitmap.bitmapData, image.bitmap.bitmapData.rect, point, 0xFF,0xFF,0xFF,0xFF);
-					_currentPackedData.packedImageQueue.push(image);
-					
-					//이미지와 겹쳐지는 공간이 있다면 해당 공간을 분할
-					searchIntersects(_spaceArray, imageRect);
-					
-					nonFlag = false;
-					break;
+					var leftRect:Rectangle = new Rectangle(rect.x, rect.y, (inter.x-rect.x), rect.height);
+					if(leftRect.width > 0 && leftRect.height > 0)
+						spaceArray.push(leftRect);
+					var rightRect:Rectangle = new Rectangle((inter.x+inter.width), rect.y, (rect.x+rect.width-(inter.x+inter.width)), rect.height);
+					if(rightRect.width > 0 && rightRect.height > 0)
+						spaceArray.push(rightRect);
+					var bottomRect:Rectangle = new Rectangle(rect.x, (inter.y+inter.height), rect.width, (rect.y+rect.height-(inter.y+inter.height)));
+					if(bottomRect.width > 0 && bottomRect.height > 0)
+						spaceArray.push(bottomRect);
+					var topRect:Rectangle = new Rectangle(rect.x, rect.y, rect.width, (inter.y-rect.y));
+					if(topRect.width > 0 && topRect.height > 0)
+						spaceArray.push(topRect);
 				}
 			}
-			
-			//추가하려는 이미지가  들어갈 수 있는 공간이 없을 경우
-			if(nonFlag)
-			{
-				_count++;
-				_dataQueue.push(image);
-				if(_dataQueue.length <= _count)
-					_changeFunc(_currentPackedData);
-				return null;
-			}
-			
-			_spaceArray.sort(orderYvalue);	//여유공간을  y값으로 정렬하여 상대적으로 아래쪽에 있는 공간은 나중에 선택이 되도록 합니다
-			return image;
+			removeContains(spaceArray);
 		}
-		*/
 		
-		private function clone(source:Object):*
+		private function removeContains(spaceArray:Vector.<Rectangle>):void
 		{
-			var clone:ByteArray = new ByteArray();
-			clone.writeObject(source);
-			clone.position = 0;
-			return(clone.readObject());
+			for(var i:int = spaceArray.length-1; i >= 0; i--)
+			{
+				for(var j:int = 0; j < spaceArray.length; j++)
+				{
+					if((spaceArray[j].containsRect(spaceArray[i])) && (i != j))
+					{
+						spaceArray.removeAt(i);
+						break;
+					}
+				}
+			}	
+		}
+		
+		private function clone(source:Vector.<ImageInfo>):Vector.<ImageInfo>
+		{
+			var clone:Vector.<ImageInfo> = new Vector.<ImageInfo>;
+			for(var i:int = 0; i < source.length; i++)
+				clone[i] = source[i];
+			return clone;
 		}
 		
 		private function orderPixels(data1:ImageInfo, data2:ImageInfo):int

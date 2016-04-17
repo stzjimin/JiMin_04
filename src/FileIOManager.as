@@ -31,7 +31,7 @@ package
 		private function onClickInputSelectButton(event:Event):void
 		{
 			_file.removeEventListener(Event.SELECT, onClickInputSelectButton);
-			_completeFunc(_file.nativePath);
+			_completeFunc(_file.nativePath, _file.name);
 		}
 		
 		private function onClickOutputSelectButton(event:Event):void

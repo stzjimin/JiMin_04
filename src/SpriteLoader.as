@@ -34,8 +34,10 @@ package
 			return _textureAtlas;
 		}
 
-		private function onInputPNG(filePath:String):void
+		private function onInputPNG(filePath:String, fileName:String):void
 		{
+			_name = fileName;
+			trace(_name);
 			_spritePath = filePath;
 			var urlRequest:URLRequest = new URLRequest(_spritePath);
 			var loader:Loader = new Loader();
@@ -48,7 +50,6 @@ package
 		{
 			_spriteSheet = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
-			_name = _spritePath.replace(".png");
 			
 			var urlRequest:URLRequest = new URLRequest(_spritePath.replace("png","xml"));
 			var xmlLoader:URLLoader = new URLLoader();
@@ -60,7 +61,7 @@ package
 		{
 			_xml = new XML(event.currentTarget.data);
 			event.currentTarget.removeEventListener("complete", onCompleteXmlLoad);
-			_completeFunc(_xml.attribute("ImagePath"), _spriteSheet, _xml);
+			_completeFunc(_name, _spriteSheet, _xml);
 		}
 	}
 }
