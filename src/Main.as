@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.system.System;
 	import flash.utils.Dictionary;
 	
 	import starling.display.Quad;
@@ -26,16 +27,16 @@ package
 		private var _animationMode:AnimationMode;
 		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
-		
+			
 		public function Main()
 		{
 			_resourceLoader = new ResourceLoader("GUI_resources", completeResourceLoad);
-			_resourceLoader.loadResource(Resource.rasources);
+			_resourceLoader.loadResource(Resource.resources);
 		}
 		
 		private function completeResourceLoad():void
 		{
-			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.rasources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["checkRadio.png"] as Bitmap));
+			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
 			_radioManager.mode = RadioState.ANIMATION;
 			_radioManager.addEventListener("ModeChange",onChangeMode);
 			
@@ -61,7 +62,7 @@ package
 			_imageButton.x = 180;
 			_imageButton.y = 580;
 			
-			_loadeButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["load.png"] as Bitmap));
+			_loadeButton = new ButtonObject(Texture.fromBitmap(Resource.resources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
 			_loadeButton.height = 40;
 			_loadeButton.x = 30;
@@ -87,7 +88,7 @@ package
 			_display.x = 25;
 			_display.y = 25;
 			
-			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
+			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
 			_SpriteSheetDrop.addEventListener("ListChange", onChangeSprite);
@@ -101,6 +102,9 @@ package
 			addChild(_animationMode);
 			addChild(_imageMode);
 			addChild(_SpriteSheetDrop);
+			
+			Resource.resources = null;
+			System.gc();
 		}
 		
 		private function onDeleteSheet(event:Event):void

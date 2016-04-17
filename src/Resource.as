@@ -4,20 +4,20 @@ package
 
 	public class Resource
 	{
-		private static var _rasources:Dictionary = new Dictionary();
+		private static var _resources:Dictionary = new Dictionary();
 		
 		public function Resource()
 		{
 		}
 
-		public static function get rasources():Dictionary
+		public static function get resources():Dictionary
 		{
-			return _rasources;
+			return _resources;
 		}
 
-		public static function set rasources(value:Dictionary):void
+		public static function set resources(value:Dictionary):void
 		{
-			_rasources = value;
+			_resources = value;
 		}
 
 	}

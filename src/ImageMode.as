@@ -1,12 +1,14 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.display.Loader;
 	import flash.display.PNGEncoderOptions;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
 	import starling.display.Sprite;
@@ -23,17 +25,17 @@ package
 		
 		public function ImageMode()
 		{
-			_imageSelectBar = new Dropdownbar(150, Texture.fromBitmap(Resource.rasources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.rasources["arrowDown.png"] as Bitmap));
+			_imageSelectBar = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
 			_imageSelectBar.y = 10;
 			_imageSelectBar.addEventListener("ListChange", onChangeImage);
 			
-			_imageAddButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["imageAdd.png"] as Bitmap));
+			_imageAddButton = new ButtonObject(Texture.fromBitmap(Resource.resources["imageAdd.png"] as Bitmap));
 			_imageAddButton.width = 40;
 			_imageAddButton.height = 40;
 			_imageAddButton.x = 170;
 			_imageAddButton.addEventListener(Event.TRIGGERED, onClickedAddButton);
 			
-			_imageSaveButton = new ButtonObject(Texture.fromBitmap(Resource.rasources["saveImage.png"] as Bitmap));
+			_imageSaveButton = new ButtonObject(Texture.fromBitmap(Resource.resources["saveImage.png"] as Bitmap));
 			_imageSaveButton.width = 40;
 			_imageSaveButton.height = 40;
 			_imageSaveButton.x = 220;
@@ -80,7 +82,21 @@ package
 		
 		private function onLoadedImage(filePath:String):void
 		{
-			trace(filePath);
+			var imageLoader:ImageLoader = new ImageLoader(onComleteLoad);
+			imageLoader.startImageLoad(filePath);
+		}
+		
+		private function onComleteLoad(bitmap:Bitmap):void
+		{
+			trace("aa");
+			var spacePixel:int = 0;
+			for(var i:int = 0; i < _spriteSheet.images.length; i++)
+				spacePixel += _spriteSheet.images[i].width*_spriteSheet.images[i].height;
+			var imagePixel:int = bitmap.width * bitmap.height;
+			if(spacePixel >= imagePixel)
+			{
+				//packer
+			}
 		}
 		
 		private function onClickedSaveButton(event:Event):void
