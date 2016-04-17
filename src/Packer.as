@@ -30,7 +30,7 @@ package
 
 		public function initPacker(spriteSheet:SpriteSheet):void
 		{
-			_currentPackedData = new PackedData(spriteSheet.name, MaxWidth, MaxHeight);
+			_currentPackedData = new PackedData(MaxWidth, MaxHeight);
 			_dataQueue = clone(spriteSheet.images);
 			_sheetBitmapData = spriteSheet.spriteBitmap.bitmapData;
 			
@@ -45,6 +45,8 @@ package
 		{
 			_dataQueue.push(addImageInfo);
 			_dataQueue = _dataQueue.sort(orderPixels);
+			var maxWidth:int = 0;
+			var maxHeight:int = 0;
 			while(_dataQueue.length != 0)
 			{
 				var image:ImageInfo = _dataQueue.shift();
@@ -61,9 +63,13 @@ package
 							_currentPackedData.bitmapData.copyPixels(_sheetBitmapData, imageRect, point);
 						else
 							_currentPackedData.bitmapData.copyPixels(addBitmap.bitmapData, imageRect, point);
+						image.x = imageRect.x = point.x;
+						image.y = imageRect.y = point.y;
 						_currentPackedData.packedImageQueue.push(image);
-						imageRect.x = point.x;
-						imageRect.y = point.y;
+						if(image.x+image.width > maxWidth)
+							maxWidth = image.x+image.width;
+						if(image.y+image.height > maxHeight)
+							maxHeight = image.y+image.height;
 						trace(imageRect.x + ", " + imageRect.y + ", " + imageRect.width + ", " + imageRect.height);
 						searchIntersects(_spaceArray, imageRect);
 						
@@ -80,6 +86,8 @@ package
 				
 				_spaceArray.sort(orderYvalue);	//여유공간을  y값으로 정렬하여 상대적으로 아래쪽에 있는 공간은 나중에 선택이 되도록 합니다
 			}
+			_currentPackedData.width = maxWidth;
+			_currentPackedData.height = maxHeight;
 			return true;
 		}
 		

@@ -4,25 +4,35 @@ package
 
 	public class PackedData
 	{
-		private var _name:String;
 		private var _bitmapData:BitmapData;
 		private var _packedImageQueue:Vector.<ImageInfo>;
+		private var _width:int;
+		private var _height:int;
 		
-		public function PackedData(name:String, width:int, height:int)
+		public function PackedData(width:int, height:int)
 		{
-			_name = name;
 			_packedImageQueue = new Vector.<ImageInfo>();
 			_bitmapData = new BitmapData(width, height);
 		}
 
-		public function get name():String
+		public function get height():int
 		{
-			return _name;
+			return _height;
 		}
 
-		public function set name(value:String):void
+		public function set height(value:int):void
 		{
-			_name = value;
+			_height = value;
+		}
+
+		public function get width():int
+		{
+			return _width;
+		}
+
+		public function set width(value:int):void
+		{
+			_width = value;
 		}
 
 		public function get bitmapData():BitmapData

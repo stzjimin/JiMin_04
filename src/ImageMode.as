@@ -94,28 +94,22 @@ package
 			
 			if(packer.addImage(bitmap, imageInfo))
 			{
-			//	trace(bitmapData.width + ", " + bitmapData.height);
-				/*
-				var byteArray:ByteArray = new ByteArray();
-				var rect:Rectangle = new Rectangle(0, 0, 1024, 1024);
-				bitmapData.encode(rect, new PNGEncoderOptions(), byteArray);
-				var localPngFile:File = File.documentsDirectory.resolvePath("test.png");
-				var fileAccess:FileStream = new FileStream();
-				fileAccess.open(localPngFile, FileMode.WRITE);
-				fileAccess.writeBytes(byteArray, 0, byteArray.length);
-				fileAccess.close();
-				*/
-				completePacking(packer.currentPackedData);
+				var fileManager:FileIOManager = new FileIOManager();
+				fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
 			}
 			else
 			{
-				trace("hahaha");
+				dispatchEvent(new Event("ImageAdd", false, "Fail"));
 			}
-		}
-		
-		private function completePacking(packedData:PackedData):void
-		{
-			trace(packedData.name);
+			
+			function onCompleteSaveSheet(filePath:String):void
+			{
+				var encoder:Encoder = new Encoder();
+				encoder.setFilePath(filePath);
+				trace(packer.currentPackedData.packedImageQueue.length);
+				encoder.encode(packer.currentPackedData);
+				dispatchEvent(new Event("ImageAdd", false, packer.currentPackedData));
+			}
 		}
 		
 		private function onClickedSaveButton(event:Event):void

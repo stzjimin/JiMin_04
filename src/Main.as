@@ -9,6 +9,7 @@ package
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.Texture;
+	import starling.utils.Color;
 
 	public class Main extends Sprite
 	{
@@ -83,7 +84,7 @@ package
 			_imageMode.visible = false;
 			_imageMode.addEventListener("ImageChange", onChangeImage);
 			_imageMode.addEventListener("CompleteSave", onCompleteSave);
-	//		_imageMode.addEventListener("Test", test);
+			_imageMode.addEventListener("ImageAdd", onCompleteAdd);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -130,6 +131,15 @@ package
 		private function onStartAnimation(event:Event):void
 		{
 			_display.startAnimation();
+		}
+		
+		private function onCompleteAdd(event:Event):void
+		{
+			var messageBox:MessageBox = new MessageBox();
+			if(event.data == "Fail")
+				messageBox.showMessageBox("Not Enough Space", 120, _display, Color.RED);
+			else
+				messageBox.showMessageBox("ImageAdd Success", 120, _display);
 		}
 		
 		private function onChangeImage(event:Event):void

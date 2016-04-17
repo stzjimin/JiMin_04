@@ -21,12 +21,12 @@ package
 			this.x = this.width / 2;
 			this.y = this.height / 2;
 			_messageText.format.font = "Arial";
-			_messageText.format.color = Color.AQUA;
 			_messageText.format.size = 20;
 		}
 		
-		public function showMessageBox(text:String, frameCount:int, parent:DisplayObjectContainer):void
+		public function showMessageBox(text:String, frameCount:int, parent:DisplayObjectContainer, color:uint = Color.AQUA):void
 		{
+			_messageText.format.color = color;
 			_messageText.text = text;
 			this.x = parent.width / 2;
 			this.y = parent.height / 2;
