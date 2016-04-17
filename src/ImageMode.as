@@ -58,8 +58,11 @@ package
 		private function setImages():void
 		{
 			_imageSelectBar.initList();
-			for(var i:int = 0; i < _spriteSheet.images.length; i++)
-				_imageSelectBar.createList(_spriteSheet.images[i].name);
+			if(_spriteSheet != null)
+			{
+				for(var i:int = 0; i < _spriteSheet.images.length; i++)
+					_imageSelectBar.createList(_spriteSheet.images[i].name);
+			}
 			_imageSelectBar.refreshList();
 		}
 		

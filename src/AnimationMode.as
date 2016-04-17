@@ -8,8 +8,6 @@ package
 
 	public class AnimationMode extends Sprite
 	{	
-		private var _spriteSheet:SpriteSheet;
-		
 		private var _startButton:ButtonObject;
 		private var _stopButton:ButtonObject;
 		private var _deleteButton:ButtonObject;
@@ -34,6 +32,7 @@ package
 			_deleteButton.width = 64;
 			_deleteButton.height = 64;
 			_deleteButton.x = 160;
+			_deleteButton.addEventListener(Event.TRIGGERED, onClickDeleteButton);
 		//	_deleteButton.y = 20;
 			
 			addChild(_startButton);
@@ -49,6 +48,11 @@ package
 		private function onClickStopButton(event:Event):void
 		{
 			dispatchEvent(new Event("StopAnimation"));
+		}
+		
+		private function onClickDeleteButton(event:Event):void
+		{
+			dispatchEvent(new Event("DeleteSheet"));
 		}
 	}
 }

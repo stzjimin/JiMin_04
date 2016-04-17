@@ -1,7 +1,5 @@
 package
-{
-	import flash.display.Bitmap;
-	
+{	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -23,7 +21,6 @@ package
 		private var _currentViewList:TextField;
 		
 		private var _dropButton:ButtonObject;
-		private var _currentList:TextField;
 		private var _selected:int;
 		private var _currentView:int;
 		
@@ -96,11 +93,6 @@ package
 			return _currentViewList;
 		}
 
-		public function get currentList():TextField
-		{
-			return _currentList;
-		}
-
 		public function togleVisible():void
 		{
 			_content.visible = !_content.visible;
@@ -119,8 +111,20 @@ package
 			list.y = _listY;
 			list.addEventListener(TouchEvent.TOUCH, onClickList);
 			_list.push(list);
-		//	trace(_content.getChildIndex(list));
-		//	_content.addChild(list);
+		}
+		
+		public function deleteList(name:String):void
+		{
+			for(var i:int = 0; i < _list.length; i++)
+			{
+				if(_list[i].text == name)
+				{
+					_list[i].removeEventListener(TouchEvent.TOUCH, onClickList);
+					_list[i].removeFromParent(true);
+					_list.removeAt(i);
+					break;
+				}
+			}
 		}
 		
 		private function onClickDropdownbar(event:Event):void
@@ -174,7 +178,6 @@ package
 			{
 				TextField(event.currentTarget).scale = 1.0;
 				_selected = _list.indexOf(TextField(event.currentTarget));
-				_currentList = TextField(event.currentTarget);
 				togleVisible();
 				_currentViewList.text = TextField(event.currentTarget).text;
 				dispatchEvent(new Event("ListChange"));

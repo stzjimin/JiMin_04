@@ -74,6 +74,7 @@ package
 			_animationMode.visible = false;
 			_animationMode.addEventListener("StartAnimation", onStartAnimation);
 			_animationMode.addEventListener("StopAnimation", onStopAnimation);
+			_animationMode.addEventListener("DeleteSheet", onDeleteSheet);
 			
 			_imageMode = new ImageMode();
 			_imageMode.x = 370;
@@ -102,6 +103,20 @@ package
 			addChild(_SpriteSheetDrop);
 		}
 		
+		private function onDeleteSheet(event:Event):void
+		{
+			_spriteSheets[_SpriteSheetDrop.currentViewList.text] = null;
+			_SpriteSheetDrop.deleteList(_SpriteSheetDrop.currentViewList.text);
+			_SpriteSheetDrop.currentViewList.text = "";
+			_SpriteSheetDrop.refreshList();
+			_imageMode.spriteSheet = null;
+			_display.stopAnimation();
+			_display.spriteSheet = null;
+			
+			var messageBox:MessageBox = new MessageBox();
+			messageBox.showMessageBox("Delete Sheet", 120, _display);
+		}
+		
 		private function onStopAnimation(event:Event):void
 		{
 			_display.stopAnimation();
@@ -114,7 +129,7 @@ package
 		
 		private function onChangeImage(event:Event):void
 		{
-			_display.viewImage(_imageMode.imageSelectBar.currentList.name);
+			_display.viewImage(_imageMode.imageSelectBar.currentViewList.text);
 		}
 		
 		private function onCompleteSave(event:Event):void
@@ -125,8 +140,8 @@ package
 		
 		private function onChangeSprite(event:Event):void
 		{
-			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
-			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
+			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
+			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
 			_imageMode.imageSelectBar.currentViewList.text = ""
 			_imageMode.imageSelectBar.refreshList();
 		}
