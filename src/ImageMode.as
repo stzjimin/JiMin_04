@@ -1,7 +1,13 @@
 package
 {
 	import flash.display.Bitmap;
+	import flash.display.PNGEncoderOptions;
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
+	import flash.utils.ByteArray;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -64,7 +70,6 @@ package
 		
 		private function onClickedAddButton(event:Event):void
 		{
-			//	var pngFileFilter:FileFilter = new FileFilter("png","*.png");
 			var fileManager:FileIOManager = new FileIOManager();
 			var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
 			fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
@@ -84,6 +89,33 @@ package
 		private function onCompleteSave(filePath:String):void
 		{
 			trace(filePath);
+			var rect:Rectangle = searchImageRect(_imageSelectBar.currentViewList.text);
+			trace(rect.x + ", " + rect.y + ", " + rect.width + ", " + rect.height);
+			var byteArray:ByteArray = new ByteArray();
+			_spriteSheet.spriteBitmap.bitmapData.encode(new Rectangle(rect.x, rect.y, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
+			
+			var localPngFile:File = File.desktopDirectory.resolvePath(filePath + ".png");
+			var fileAccess:FileStream = new FileStream();
+			fileAccess.open(localPngFile, FileMode.WRITE);
+			fileAccess.writeBytes(byteArray, 0, byteArray.length);
+			fileAccess.close();
+			dispatchEvent(new Event("CompleteSave"));
+		}
+		
+		private function searchImageRect(subTextureName:String):Rectangle
+		{
+			var rect:Rectangle = new Rectangle();
+			for(var i:int = 0; i < _spriteSheet.images.length; i++)
+			{
+				if(_spriteSheet.images[i].name == subTextureName)
+				{
+					rect.x = _spriteSheet.images[i].x;
+					rect.y = _spriteSheet.images[i].y;
+					rect.width = _spriteSheet.images[i].width;
+					rect.height = _spriteSheet.images[i].height;
+				}
+			}
+			return rect;
 		}
 	}
 }

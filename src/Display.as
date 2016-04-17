@@ -16,6 +16,7 @@ package
 		
 		private var _content:Sprite;
 		private var _backGround:Quad;
+		private var _evnetMessage:TextField;
 		
 		private var _mode:String = RadioState.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
@@ -67,13 +68,26 @@ package
 			_currentAnimationName.y = _height/6 * 5;
 			_currentAnimationName.visible = false;
 			
+			_evnetMessage = new TextField(120, 20, "");
+			
 			addChild(_backGround);
 			addChild(_content);
+			addChild(_evnetMessage);
 			_content.addChild(_currentImage);
 			_content.addChild(_currentAnimation);
 			_content.addChild(_currentAnimationName);
 		}
 		
+		public function get evnetMessage():TextField
+		{
+			return _evnetMessage;
+		}
+
+		public function set evnetMessage(value:TextField):void
+		{
+			_evnetMessage = value;
+		}
+
 		public function get spriteSheet():SpriteSheet
 		{
 			return _spriteSheet;

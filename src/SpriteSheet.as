@@ -49,15 +49,7 @@ package
 			_subTextures = new Dictionary();
 			for(var i:int = 0; i < _images.length; i++)
 			{
-				/*
-				var transformationMatrix:Matrix = new Matrix();
-				transformationMatrix.scale(_images[i].width  / _atlasTexture.width,
-					_images[i].height / _atlasTexture.height);
-				transformationMatrix.translate(_images[i].x  / _atlasTexture.width,
-					_images[i].y  / _atlasTexture.height);
-				*/
 				var region:Rectangle = new Rectangle(_images[i].x, _images[i].y, _images[i].width, _images[i].height);
-				
 				var subTexture:Texture = Texture.fromTexture(_atlasTexture, region);
 				_subTextures[_images[i].name] = subTexture;
 			}

@@ -28,15 +28,15 @@ package
 			_file.browseForSave(title);
 		}
 		
-		private function onClickInputSelectButton(event:flash.events.Event):void
+		private function onClickInputSelectButton(event:Event):void
 		{
-			_file.removeEventListener(flash.events.Event.SELECT, onClickInputSelectButton);
+			_file.removeEventListener(Event.SELECT, onClickInputSelectButton);
 			_completeFunc(_file.nativePath);
 		}
 		
-		private function onClickOutputSelectButton(event:flash.events.Event):void
+		private function onClickOutputSelectButton(event:Event):void
 		{
-			_file.removeEventListener(flash.events.Event.SELECT, onClickOutputSelectButton);
+			_file.removeEventListener(Event.SELECT, onClickOutputSelectButton);
 			_completeFunc(_file.nativePath);
 		}
 	}

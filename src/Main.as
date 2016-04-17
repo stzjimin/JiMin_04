@@ -80,6 +80,7 @@ package
 			_imageMode.y = 550;
 			_imageMode.visible = false;
 			_imageMode.addEventListener("ImageChange", onChangeImage);
+			_imageMode.addEventListener("CompleteSave", onCompleteSave);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -116,6 +117,12 @@ package
 			_display.viewImage(_imageMode.imageSelectBar.currentList.name);
 		}
 		
+		private function onCompleteSave(event:Event):void
+		{
+			var messageBox:MessageBox = new MessageBox();
+			messageBox.showMessageBox("Save Complete", 120, _display);
+		}
+		
 		private function onChangeSprite(event:Event):void
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentList.name];
@@ -138,33 +145,27 @@ package
 				_imageMode.visible = true;
 				_display.stopAnimation();
 			}
-		//	trace(_display.mode);
 		}
 		
 		private function onClickLoadButton(event:Event):void
 		{
-		//	event.currentTarget.removeEventListener(Event.TRIGGERED, onClickLoadButton);
-		//	Button(event.currentTarget).removeFromParent(true);
 			var spriteLoader:SpriteLoader = new SpriteLoader(completeLoad);
 		}
 		
 		private function completeLoad(name:String, loadSprite:Bitmap, loadXml:XML):void
 		{
-		//	var testImage:Image = new Image(Texture.fromBitmap(loadSprite));
-		//	addChild(testImage);
-			var spriteSheet:SpriteSheet = new SpriteSheet(name, loadSprite, loadXml);
-			_spriteSheets[name] = spriteSheet;
-		//	addChild(_spriteSheets[0].spriteBitmap);
-		//	var testImage:Image = new Image(Texture.fromBitmap(_spriteSheets[0].spriteBitmap));
-		//	addChild(testImage);
-		//	for(var i:int = 0; i < _spriteSheets[0].images.length; i++)
-		//		trace(_spriteSheets[0].images[i].name);
-		//	trace(loadXml);
-		//	trace(loadXml.child("SubTexture").name());
-		//	trace(loadXml.child("SubTexture")[0].attribute("name"));
-		//	_display.spriteSheet = _spriteSheets[name];
-		//	_display.viewSprite();
-			_SpriteSheetDrop.createList(name);
+			var messageBox:MessageBox = new MessageBox();
+			if(_spriteSheets[name] == null)
+			{
+				var spriteSheet:SpriteSheet = new SpriteSheet(name, loadSprite, loadXml);
+				_spriteSheets[name] = spriteSheet;
+				_SpriteSheetDrop.createList(name);
+				messageBox.showMessageBox("Load Success", 120, _display);
+			}
+			else
+			{
+				messageBox.showMessageBox("Load Fail", 120, _display);
+			}
 		}
 	}
 }

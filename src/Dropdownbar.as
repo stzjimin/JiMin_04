@@ -132,7 +132,6 @@ package
 		{
 			for(var j:int = _content.numChildren-1; j > 2; j--)
 			{
-				//	trace(_content.getChildAt(j));
 				_content.getChildAt(j).y = _listY;
 				_content.removeChildAt(j);
 			}
@@ -169,13 +168,11 @@ package
 			if(event.getTouch(TextField(event.currentTarget), TouchPhase.BEGAN) != null)
 			{
 				TextField(event.currentTarget).scale = 0.9;
-			//	trace(TextField(event.currentTarget).text);
 			}
 			
 			if(event.getTouch(TextField(event.currentTarget), TouchPhase.ENDED) != null)
 			{
 				TextField(event.currentTarget).scale = 1.0;
-			//	trace(TextField(event.currentTarget).name);
 				_selected = _list.indexOf(TextField(event.currentTarget));
 				_currentList = TextField(event.currentTarget);
 				togleVisible();
