@@ -25,26 +25,26 @@ package Screen
 			_startButton = new ButtonObject(Texture.fromBitmap(Resource.resources["start.png"] as Bitmap));
 			_startButton.width = 64;
 			_startButton.height = 64;
-			_startButton.x = 20;
+			_startButton.x = 0;
 			_startButton.y = 30;
 			_startButton.addEventListener(Event.TRIGGERED, onClickStartButton);
 			
 			_stopButton = new ButtonObject(Texture.fromBitmap(Resource.resources["stop.png"] as Bitmap));
 			_stopButton.width = 64;
 			_stopButton.height = 64;
-			_stopButton.x = 90;
+			_stopButton.x = 60;
 			_stopButton.y = 30;
 			_stopButton.addEventListener(Event.TRIGGERED, onClickStopButton);
 			
 			_deleteButton = new ButtonObject(Texture.fromBitmap(Resource.resources["delete.png"] as Bitmap));
 			_deleteButton.width = 64;
 			_deleteButton.height = 64;
-			_deleteButton.x = 160;
+			_deleteButton.x = 120;
 			_deleteButton.y = 27;
 			_deleteButton.addEventListener(Event.TRIGGERED, onClickDeleteButton);
 			
 			_animationSpeed = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
-			_animationSpeed.x = 20;
+			_animationSpeed.x = 10;
 			_animationSpeed.y = 0;
 			_animationSpeed.addEventListener(CustomizeEvent.ListChange, onChangeSpeed);
 			_animationSpeed.createList("5frame / 1page");
