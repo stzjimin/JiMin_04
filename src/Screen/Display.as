@@ -1,5 +1,9 @@
 package Screen
 {
+	import Data.SpriteSheet;
+	
+	import Util.RadioKeyValue;
+	
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -9,12 +13,10 @@ package Screen
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
-	import Data.SpriteSheet;
-	import Util.RadioKeyValue;
 
 	public class Display extends Sprite
 	{
-		private const AnimationFrame:int = 30;
+		private var _animationFrame:int = 10;
 		
 		private var _content:Sprite;
 		private var _backGround:Quad;
@@ -149,6 +151,11 @@ package Screen
 			_currentImage.texture = _spriteSheet.subTextures[textureName];
 		}
 		
+		public function changeSpeed(speed:int):void
+		{
+			_animationFrame = speed;
+		}
+		
 		/**
 		 *에니메이션을 정지시키면 _currentAnimation의 EnterFrame에 대한 이벤트리스너를 제거합니다. 
 		 * 
@@ -180,7 +187,7 @@ package Screen
 		private function goAnimation(event:Event):void
 		{
 			_frameCounter++;
-			if(_frameCounter >= AnimationFrame)
+			if(_frameCounter >= _animationFrame)
 			{
 				changeAnimation();
 				_frameCounter = 0;

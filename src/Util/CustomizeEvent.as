@@ -13,9 +13,15 @@ package Util
 		private static const _PackingComplete:String = "CompletePack";
 		private static const _ListChange:String = "ListChange";
 		private static const _ModeChange:String = "ModeChange";
+		private static const _SpeedChange:String = "SpeedChange";
 		
 		public function CustomizeEvent()
 		{
+		}
+
+		public static function get SpeedChange():String
+		{
+			return _SpeedChange;
 		}
 
 		public static function get ModeChange():String

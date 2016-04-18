@@ -96,6 +96,7 @@ package Screen
 			_animationMode.addEventListener(CustomizeEvent.AnimationStart, onStartAnimation);
 			_animationMode.addEventListener(CustomizeEvent.AnimationStop, onStopAnimation);
 			_animationMode.addEventListener(CustomizeEvent.SpriteDelete, onDeleteSheet);
+			_animationMode.addEventListener(CustomizeEvent.SpeedChange, onChangeSpeed);
 			
 			_imageMode = new ImageMode();
 			_imageMode.x = 370;
@@ -170,6 +171,11 @@ package Screen
 		private function onStartAnimation(event:Event):void
 		{
 			_display.startAnimation();
+		}
+		
+		private function onChangeSpeed(event:Event):void
+		{
+			_display.changeSpeed(event.data as int);
 		}
 		
 		/**
