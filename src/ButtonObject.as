@@ -27,10 +27,13 @@ package
 		private var _enabled:Boolean;
 		private var _triggerBounds:Rectangle;
 		
+		/**
+		 *Starling에 있는 Button클래스를 필요한부분만 가져와서 간단하게 구현해봤습니다. 
+		 * @param upState
+		 * 
+		 */		
 		public function ButtonObject(upState:Texture)
 		{
-		//	if (upState == null) throw new ArgumentError("Texture 'upState' cannot be null");
-			
 			_upState = upState;
 			
 			_state = ButtonState.UP;

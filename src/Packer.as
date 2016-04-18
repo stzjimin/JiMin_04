@@ -51,14 +51,12 @@ package
 			{
 				var image:ImageInfo = _dataQueue.shift();
 				var nonFlag:Boolean = true;
-			//	trace(_spaceArray.length);
 				for(var i:int = 0; i < _spaceArray.length; i++)
 				{
 					if(_spaceArray[i].containsRect(new Rectangle(_spaceArray[i].x, _spaceArray[i].y, image.width, image.height)))
 					{
 						var point:Point = new Point(_spaceArray[i].x, _spaceArray[i].y);
 						var imageRect:Rectangle = new Rectangle(image.x, image.y, image.width, image.height);
-				//		trace(image.name + " = " + image.x + ", " + image.y + ", " + image.width + ", " + image.height);
 						if(addImageInfo.name != image.name)
 							_currentPackedData.bitmapData.copyPixels(_sheetBitmapData, imageRect, point);
 						else
@@ -66,7 +64,6 @@ package
 						image.x = imageRect.x = point.x;
 						image.y = imageRect.y = point.y;
 						_currentPackedData.packedImageQueue.push(image);
-				//		trace(imageRect.x + ", " + imageRect.y + ", " + imageRect.width + ", " + imageRect.height);
 						searchIntersects(_spaceArray, imageRect);
 						
 						nonFlag = false;

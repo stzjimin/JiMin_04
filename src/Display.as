@@ -12,7 +12,7 @@ package
 
 	public class Display extends Sprite
 	{
-		private const AnimationFram:int = 30;
+		private const AnimationFrame:int = 30;
 		
 		private var _content:Sprite;
 		private var _backGround:Quad;
@@ -31,6 +31,12 @@ package
 		private var _animationCounter:int;
 		private var _frameCounter:int;
 		
+		/**
+		 *화면에서 유저에게 보여지는 Display화면을 담당하는 클래스입니다. 
+		 * @param width
+		 * @param height
+		 * 
+		 */		
 		public function Display(width:int, height:int)
 		{
 			_content = new Sprite();
@@ -58,14 +64,14 @@ package
 			_currentAnimation.y = _height / 2;
 			_currentAnimation.width = 1;
 			_currentAnimation.height = 1;
-			_currentAnimation.visible = false;
+			_currentAnimation.visible = true;
 			
 			_currentAnimationName = new TextField(120, 20, "");
 			_currentAnimationName.pivotX = _currentAnimationName.width / 2;
 			_currentAnimationName.pivotY = _currentAnimationName.height / 2;
 			_currentAnimationName.x = _width/6 * 5;
 			_currentAnimationName.y = _height/6 * 5;
-			_currentAnimationName.visible = false;
+			_currentAnimationName.visible = true;
 			
 			addChild(_backGround);
 			addChild(_content);
@@ -73,12 +79,12 @@ package
 			_content.addChild(_currentAnimation);
 			_content.addChild(_currentAnimationName);
 		}
-		
-		public function get spriteSheet():SpriteSheet
-		{
-			return _spriteSheet;
-		}
 
+		/**
+		 *_spriteSheet가 변경될때 필요한 작업들은 setter로 넣었습니다. 
+		 * @param value
+		 * 
+		 */		
 		public function set spriteSheet(value:SpriteSheet):void
 		{
 			_spriteSheet = value;
@@ -130,11 +136,31 @@ package
 			}
 		}
 		
+		/**
+		 *이미지 모드상태에서 해당 이미지를 변경하는 함수입니다. 
+		 * @param textureName
+		 * 
+		 */		
+		public function viewImage(textureName:String):void
+		{
+			_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
+			_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
+			_currentImage.texture = _spriteSheet.subTextures[textureName];
+		}
+		
+		/**
+		 *에니메이션을 정지시키면 _currentAnimation의 EnterFrame에 대한 이벤트리스너를 제거합니다. 
+		 * 
+		 */		
 		public function stopAnimation():void
 		{
 			_currentAnimation.removeEventListener(Event.ENTER_FRAME, goAnimation);
 		}
 		
+		/**
+		 *에니메이션이 시작하게되면 _framCounter는 초기화시켜주고  _currentAnimation에 EnterFrame에 대한 이벤트리스너를 추가시켜줍니다.
+		 * 
+		 */		
 		public function startAnimation():void
 		{
 			if(_spriteSheet != null)
@@ -144,16 +170,27 @@ package
 			}
 		}
 		
+		/**
+		 *_currentAnimation이 EnterFrame에 대한 이벤트리스너가 있을 때 EnterFrame이 될 때 마다 실행되는 함수입니다.
+		 * 한번실행될때 마다 _frameCounter를 증가시켜주고 AnimaitonFrame에 도달하면 changeAnimation을 실행시키고 _frameCounter를 초기화시켜줍니다.
+		 * @param event
+		 * 
+		 */		
 		private function goAnimation(event:Event):void
 		{
 			_frameCounter++;
-			if(_frameCounter >= AnimationFram)
+			if(_frameCounter >= AnimationFrame)
 			{
 				changeAnimation();
 				_frameCounter = 0;
 			}
 		}
 		
+		/**
+		 *_currentAnimation의 텍스쳐를 다음 텍스쳐로 전환해줍니다.
+		 * _animationCounter가 _spriteSheet에 있는 이미지의 개수만큼 증가했다면 애니메이션을 종료시켜줍니다.
+		 * 
+		 */		
 		private function changeAnimation():void
 		{
 			_currentAnimation.texture = _spriteSheet.subTextures[_spriteSheet.images[_animationCounter].name];
@@ -168,6 +205,12 @@ package
 			}
 		}
 		
+		/**
+		 *Display가 이미지모드일 때 이미지가 클릭되면 호출되는 함수입니다.
+		 * 이미지가 클릭되있는 동안 이미지는 고정크기로 전환됩니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onClickImage(event:TouchEvent):void
 		{
 			if(event.getTouch(_currentImage, TouchPhase.BEGAN) != null)
@@ -183,17 +226,22 @@ package
 			}
 		}
 		
-		public function viewImage(textureName:String):void
-		{
-			_currentImage.width = getLocalWidth(_spriteSheet.subTextures[textureName].width);
-			_currentImage.height = getLocalHeight(_spriteSheet.subTextures[textureName].height);
-			_currentImage.texture = _spriteSheet.subTextures[textureName];
-		}
-		
+		/**
+		 * Display창에 비례하여 이미지의 알맞은 길이를 계산하는 함수입니다.
+		 * @param width
+		 * @return 
+		 * 
+		 */		
 		private function getLocalWidth(width:Number):Number
 		{
 			return width*_width / 1024;
 		}
+		/**
+		 * Display창에 비례하여 이미지의 알맞은 높이를 계산하는 함수입니다.
+		 * @param height
+		 * @return 
+		 * 
+		 */		
 		private function getLocalHeight(height:Number):Number
 		{
 			return height*_height / 1024;

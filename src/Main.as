@@ -28,13 +28,21 @@ package
 		private var _animationMode:AnimationMode;
 		private var _imageMode:ImageMode;
 		private var _SpriteSheetDrop:Dropdownbar;
-			
+		
+		/**
+		 *Main클래스는 시작할 때 리소스를 로드합니다. 
+		 * 
+		 */		
 		public function Main()
 		{
 			_resourceLoader = new ResourceLoader("GUI_resources", completeResourceLoad);
 			_resourceLoader.loadResource(Resource.resources);
 		}
 		
+		/**
+		 *리소스 로드가 끝나고나면 화면을 구성합니다. 
+		 * 
+		 */		
 		private function completeResourceLoad():void
 		{
 			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
@@ -85,6 +93,7 @@ package
 			_imageMode.addEventListener("ImageChange", onChangeImage);
 			_imageMode.addEventListener("CompleteSave", onCompleteSave);
 			_imageMode.addEventListener("ImageAdd", onCompleteAdd);
+			_imageMode.addEventListener("CompletePack", onCompletePack);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -105,62 +114,118 @@ package
 			addChild(_imageMode);
 			addChild(_SpriteSheetDrop);
 			
-			Resource.resources = null;
+			Resource.resources = null;		//리소스를 사용이 끝나고나면 메모리를 풀어줌
 			System.gc();
+			
+		//	_animationButton.dispatchEvent(new Event(Event.TRIGGERED));
 		}
 		
+		/**
+		 *현재 보고있는 SpriteSheet를 목록에서 삭제합니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onDeleteSheet(event:Event):void
 		{
-			_spriteSheets[_SpriteSheetDrop.currentViewList.text] = null;
-			_SpriteSheetDrop.deleteList(_SpriteSheetDrop.currentViewList.text);
-			_SpriteSheetDrop.currentViewList.text = "";
+			var messageBox:MessageBox = new MessageBox();
+			if(_SpriteSheetDrop.currentSelectList.text == "")
+				messageBox.showMessageBox("Delete Fail", 120, _display, Color.RED);
+			else
+				messageBox.showMessageBox("Delete Sheet", 120, _display, Color.RED);
+			_spriteSheets[_SpriteSheetDrop.currentSelectList.text] = null;
+			_SpriteSheetDrop.deleteList(_SpriteSheetDrop.currentSelectList.text);
+			_SpriteSheetDrop.currentSelectList.text = "";
 			_SpriteSheetDrop.refreshList();
 			_imageMode.spriteSheet = null;
 			_display.stopAnimation();
 			_display.spriteSheet = null;
-			
-			var messageBox:MessageBox = new MessageBox();
-			messageBox.showMessageBox("Delete Sheet", 120, _display);
 		}
 		
+		/**
+		 *현재 보고있는 에니메이션화면을 정지합니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onStopAnimation(event:Event):void
 		{
 			_display.stopAnimation();
 		}
 		
+		/**
+		 *현재 선택되어있는 SpriteSheet의 에니메이션을 시작합니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onStartAnimation(event:Event):void
 		{
 			_display.startAnimation();
 		}
 		
+		/**
+		 *ImageMode에서 이미지추가에대한 결과보고를 받게되는 함수입니다.
+		 * @param event
+		 * 
+		 */		
 		private function onCompleteAdd(event:Event):void
 		{
 			var messageBox:MessageBox = new MessageBox();
-			if(event.data == "Fail")
+			if(event.data == "Full")
 				messageBox.showMessageBox("Not Enough Space", 120, _display, Color.RED);
+			else if(event.data == "Used")
+				messageBox.showMessageBox("Image Already Added", 120, _display, Color.RED);
 			else
 				messageBox.showMessageBox("Image Add", 120, _display);
 		}
 		
-		private function onChangeImage(event:Event):void
+		/**
+		 *ImageMode에서 패킹에대한 결과보고를 받게되는 함수입니다.
+		 * @param event
+		 * 
+		 */		
+		private function onCompletePack(event:Event):void
 		{
-			_display.viewImage(_imageMode.imageSelectBar.currentViewList.text);
+			var messageBox:MessageBox = new MessageBox();
+			messageBox.showMessageBox("Complete Packing", 120, _display);
 		}
 		
+		/**
+		 *ImageMode에서 이미지가 변경됬을 때 호출되는 함수입니다. evnet와 함께 날아오는 data는 변경된 이미지의 이름입니다.
+		 * @param event
+		 * 
+		 */		
+		private function onChangeImage(event:Event):void
+		{
+			_display.viewImage(event.data as String);
+		}
+		
+		/**
+		 *ImageMode에서 현재보고있는 이미지에 대한 저장이 성공했을 때 호출되는 함수입니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onCompleteSave(event:Event):void
 		{
 			var messageBox:MessageBox = new MessageBox();
 			messageBox.showMessageBox("Save Complete", 120, _display);
 		}
 		
+		/**
+		 *_SpriteSheetDrop에서 SpriteSheet가 선택되었을 때 호출되는 함수입니다.
+		 * _display와 _imageMode에 해당 스프라이트시트를 연결해줍니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onChangeSprite(event:Event):void
 		{
-			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
-			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
-			_imageMode.imageSelectBar.currentViewList.text = "";
-			_imageMode.imageSelectBar.refreshList();
+			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentSelectList.text];
+			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentSelectList.text];
 		}
 		
+		/**
+		 *_radioManager에 속해있는 버튼들 중 하나의 버튼이 클릭되면 호출되는 함수입니다.
+		 * @param event
+		 * 
+		 */		
 		private function onChangeMode(event:Event):void
 		{
 			_display.mode = _radioManager.mode;
@@ -177,11 +242,24 @@ package
 			}
 		}
 		
+		/**
+		 *SpriteLoad버튼이 눌렀을 때 호출되는 함수입니다. 
+		 * @param event
+		 * 
+		 */		
 		private function onClickLoadButton(event:Event):void
 		{
 			var spriteLoader:SpriteLoader = new SpriteLoader(completeLoad);
 		}
 		
+		/**
+		 *spriteLoader가 로딩을 완료하게되면 호출되는 함수입니다.
+		 * 로드된 png파일의 이름과 비트맵, xml파일로 새로운 SpriteSheet객체를 생성합니다.
+		 * @param name
+		 * @param loadSprite
+		 * @param loadXml
+		 * 
+		 */		
 		private function completeLoad(name:String, loadSprite:Bitmap, loadXml:XML):void
 		{
 			var messageBox:MessageBox = new MessageBox();

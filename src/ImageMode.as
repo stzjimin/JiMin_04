@@ -57,12 +57,8 @@ package
 		public function set spriteSheet(value:SpriteSheet):void
 		{
 			_spriteSheet = value;
+			_imageSelectBar.currentSelectList.text = "";
 			setImages();
-		}
-
-		public function get imageSelectBar():Dropdownbar
-		{
-			return _imageSelectBar;
 		}
 		
 		private function setImages():void
@@ -76,32 +72,19 @@ package
 			_imageSelectBar.refreshList();
 		}
 		
-		private function onClickedPackButton(event:Event):void
-		{
-			var fileManager:FileIOManager = new FileIOManager();
-			fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
-		}
-		
-		private function onCompleteSaveSheet(filePath:String):void
-		{
-			var packedData:PackedData = new PackedData(1024, 1024);
-			packedData.bitmapData = _spriteSheet.spriteBitmap.bitmapData;
-			packedData.packedImageQueue = _spriteSheet.images;
-			var encoder:Encoder = new Encoder();
-			encoder.setFilePath(filePath);
-			encoder.encode(packedData);
-		}
-		
 		private function onChangeImage(event:Event):void
 		{
-			dispatchEvent(new Event("ImageChange"));
+			dispatchEvent(new Event("ImageChange", false, _imageSelectBar.currentSelectList.text));
 		}
 		
 		private function onClickedAddButton(event:Event):void
 		{
-			var fileManager:FileIOManager = new FileIOManager();
-			var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
-			fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
+			if(_spriteSheet != null)
+			{
+				var fileManager:FileIOManager = new FileIOManager();
+				var imageFileFilter:FileFilter = new FileFilter("Images","*.jpg;*.png");
+				fileManager.selectFile("이미지를 선택하세요", imageFileFilter, onLoadedImage);
+			}
 		}
 		
 		private function onLoadedImage(filePath:String, fileName:String):void
@@ -113,6 +96,11 @@ package
 		
 		private function onComleteLoad(bitmap:Bitmap, imageInfo:ImageInfo):void
 		{
+			if(_spriteSheet.subTextures[imageInfo.name] != null)
+			{
+				dispatchEvent(new Event("ImageAdd", false, "Used"));
+				return;
+			}
 			var packer:Packer = new Packer();
 			packer.initPacker(_spriteSheet);
 			trace(imageInfo.x + ", " + imageInfo.y);
@@ -126,26 +114,48 @@ package
 			}
 			else
 			{
-				dispatchEvent(new Event("ImageAdd", false, "Fail"));
+				dispatchEvent(new Event("ImageAdd", false, "Full"));
 			}
+		}
+		
+		private function onClickedPackButton(event:Event):void
+		{
+			if(_spriteSheet != null)
+			{
+				var fileManager:FileIOManager = new FileIOManager();
+				fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
+			}
+		}
+		
+		private function onCompleteSaveSheet(filePath:String):void
+		{
+			var packedData:PackedData = new PackedData(1024, 1024);
+			packedData.bitmapData = _spriteSheet.spriteBitmap.bitmapData;
+			packedData.packedImageQueue = _spriteSheet.images;
+			var encoder:Encoder = new Encoder();
+			encoder.setFilePath(filePath);
+			encoder.encode(packedData);
+			dispatchEvent(new Event("CompletePack"));
 		}
 		
 		private function onClickedSaveButton(event:Event):void
 		{
-			var fileManager:FileIOManager = new FileIOManager();
-			fileManager.saveFile("이미지 저장", onCompleteSave);
+			if(_imageSelectBar.currentSelectList.text != "")
+			{
+				var fileManager:FileIOManager = new FileIOManager();
+				fileManager.saveFile("이미지 저장", onCompleteSave);
+			}
 		}
 		
 		private function onCompleteSave(filePath:String):void
 		{
 			trace(filePath);
-			var rect:Rectangle = searchImageRect(_imageSelectBar.currentViewList.text);
+			var rect:Rectangle = searchImageRect(_imageSelectBar.currentSelectList.text);
 			trace(rect.x + ", " + rect.y + ", " + rect.width + ", " + rect.height);
 			var bitmapData:BitmapData = new BitmapData(rect.width, rect.height);
 			var byteArray:ByteArray = new ByteArray();
 			bitmapData.copyPixels(_spriteSheet.spriteBitmap.bitmapData, rect, new Point(0, 0));
 			bitmapData.encode(new Rectangle(0, 0, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
-		//	_spriteSheet.spriteBitmap.bitmapData.encode(new Rectangle(rect.x, rect.y, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
 			
 			var localPngFile:File = File.desktopDirectory.resolvePath(filePath + ".png");
 			var fileAccess:FileStream = new FileStream();

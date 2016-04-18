@@ -15,6 +15,13 @@ package
 		private var _subTextures:Dictionary;
 		private var _images:Vector.<ImageInfo>;
 		
+		/**
+		 *SpriteSheet는 생성될 때 이름과 비트맵, xml파일을 받아옵니다. 
+		 * @param name
+		 * @param spriteBitmap
+		 * @param xml
+		 * 
+		 */		
 		public function SpriteSheet(name:String, spriteBitmap:Bitmap, xml:XML)
 		{
 			_name = name;
@@ -44,6 +51,10 @@ package
 			return _name;
 		}
 		
+		/**
+		 *SpriteSheet의 xml로 생성된 ImageInfo들로 SubTexture를 생성합니다. 
+		 * 
+		 */		
 		private function loadSubTexture():void
 		{
 			_subTextures = new Dictionary();
@@ -55,6 +66,11 @@ package
 			}
 		}
 
+		/**
+		 *xml파일을 한줄씩 읽어서 ImageInfo를 생성합니다
+		 * @param xml
+		 * 
+		 */		
 		private function readXML(xml:XML):void
 		{
 			_images = new Vector.<ImageInfo>();
