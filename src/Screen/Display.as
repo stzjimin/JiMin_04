@@ -10,7 +10,7 @@ package Screen
 	import starling.textures.Texture;
 	import starling.utils.Color;
 	import Data.SpriteSheet;
-	import Util.RadioState;
+	import Util.RadioKeyValue;
 
 	public class Display extends Sprite
 	{
@@ -19,7 +19,7 @@ package Screen
 		private var _content:Sprite;
 		private var _backGround:Quad;
 		
-		private var _mode:String = RadioState.ANIMATION;
+		private var _mode:String = RadioKeyValue.ANIMATION;
 		private var _spriteSheet:SpriteSheet;
 		private var _spriteTexture:Texture;
 		
@@ -117,21 +117,21 @@ package Screen
 		{
 			if(value == "Animation" || value == "animation" || value == "ANIMATION")
 			{
-				_mode = RadioState.ANIMATION;
+				_mode = RadioKeyValue.ANIMATION;
 				_currentImage.visible = false;
 				_currentAnimation.visible = true;
 				_currentAnimationName.visible = true;
 			}
 			else if(value == "Image" || value == "image" || value == "IMAGE")
 			{
-				_mode = RadioState.IMAGE;
+				_mode = RadioKeyValue.IMAGE;
 				_currentAnimation.visible = false;
 				_currentAnimationName.visible = false;
 				_currentImage.visible = true;
 			}
 			else
 			{
-				_mode = RadioState.ANIMATION;
+				_mode = RadioKeyValue.ANIMATION;
 				_currentImage.visible = false;
 				_currentAnimation.visible = true;
 				_currentAnimationName.visible = true;

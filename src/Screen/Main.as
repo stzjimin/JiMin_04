@@ -20,7 +20,7 @@ package Screen
 	import Data.SpriteSheet;
 	import Component.MessageBox;
 	import Util.CustomizeEvent;
-	import Util.RadioState;
+	import Util.RadioKeyValue;
 
 	public class Main extends Sprite
 	{
@@ -57,7 +57,7 @@ package Screen
 		private function completeResourceLoad():void
 		{
 			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
-			_radioManager.mode = RadioState.ANIMATION;
+			_radioManager.mode = RadioKeyValue.ANIMATION;
 			_radioManager.addEventListener(CustomizeEvent.ModeChange,onChangeMode);
 			
 			_animaionText = new TextField(100, 20, "Animation");
@@ -70,13 +70,13 @@ package Screen
 			_imageText.x = 200;
 			_imageText.y = 580;
 			
-			_animationButton = _radioManager.createButton(RadioState.ANIMATION);
+			_animationButton = _radioManager.createButton(RadioKeyValue.ANIMATION);
 			_animationButton.width = 20;
 			_animationButton.height = 20;
 			_animationButton.x = 180;
 			_animationButton.y = 550;
 			
-			_imageButton = _radioManager.createButton(RadioState.IMAGE);
+			_imageButton = _radioManager.createButton(RadioKeyValue.IMAGE);
 			_imageButton.width = 20;
 			_imageButton.height = 20;
 			_imageButton.x = 180;
@@ -242,12 +242,12 @@ package Screen
 		private function onChangeMode(event:Event):void
 		{
 			_display.mode = _radioManager.mode;
-			if(_display.mode == RadioState.ANIMATION)
+			if(_display.mode == RadioKeyValue.ANIMATION)
 			{
 				_imageMode.visible = false;
 				_animationMode.visible = true;
 			}
-			else if(_display.mode == RadioState.IMAGE)
+			else if(_display.mode == RadioKeyValue.IMAGE)
 			{
 				_animationMode.visible = false;
 				_imageMode.visible = true;
