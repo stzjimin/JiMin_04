@@ -1,10 +1,11 @@
-package
+package Component
 {	
 	import flash.utils.Dictionary;
 	
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
+	import Util.CustomizeEvent;
 
 	public class RadioButtonManager extends EventDispatcher
 	{	

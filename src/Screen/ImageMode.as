@@ -1,4 +1,4 @@
-package
+package Screen
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -14,6 +14,17 @@ package
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	import Component.ButtonObject;
+	import Component.Dropdownbar;
+	import Data.Encoder;
+	import Data.FileIOManager;
+	import Data.ImageInfo;
+	import Data.ImageLoader;
+	import Data.PackedData;
+	import Data.Packer;
+	import Data.Resource;
+	import Data.SpriteSheet;
+	import Util.CustomizeEvent;
 
 	public class ImageMode extends Sprite
 	{	

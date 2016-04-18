@@ -1,4 +1,4 @@
-package
+package Component
 {
 	import starling.textures.Texture;
 

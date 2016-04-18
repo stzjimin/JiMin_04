@@ -1,4 +1,4 @@
-package
+package Component
 {
 	import flash.geom.Rectangle;
 	import flash.ui.Mouse;

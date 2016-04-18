@@ -1,10 +1,13 @@
-package
+package Screen
 {
 	import flash.display.Bitmap;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	import Component.ButtonObject;
+	import Data.Resource;
+	import Util.CustomizeEvent;
 
 	public class AnimationMode extends Sprite
 	{	

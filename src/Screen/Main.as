@@ -1,4 +1,4 @@
-package
+package Screen
 {
 	import flash.display.Bitmap;
 	import flash.system.System;
@@ -10,6 +10,17 @@ package
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
+	import Component.ButtonObject;
+	import Component.Dropdownbar;
+	import Component.RadioButton;
+	import Component.RadioButtonManager;
+	import Data.Resource;
+	import Data.ResourceLoader;
+	import Data.SpriteLoader;
+	import Data.SpriteSheet;
+	import Component.MessageBox;
+	import Util.CustomizeEvent;
+	import Util.RadioState;
 
 	public class Main extends Sprite
 	{

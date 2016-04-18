@@ -1,4 +1,4 @@
-package
+package Data
 {
 	import flash.display.Bitmap;
 	import flash.geom.Rectangle;

@@ -1,4 +1,4 @@
-package
+package Data
 {
 	import flash.events.Event;
 	import flash.filesystem.File;

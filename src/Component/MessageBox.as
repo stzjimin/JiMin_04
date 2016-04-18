@@ -1,4 +1,4 @@
-package
+package Component
 {
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Sprite;

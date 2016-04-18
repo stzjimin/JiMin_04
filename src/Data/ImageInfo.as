@@ -1,4 +1,4 @@
-package
+package Data
 {
 	public class ImageInfo
 	{

@@ -1,4 +1,4 @@
-package
+package Data
 {
 	import flash.utils.Dictionary;
 

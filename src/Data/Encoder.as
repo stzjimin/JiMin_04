@@ -1,4 +1,4 @@
-package
+package Data
 {
 	import flash.display.BitmapData;
 	import flash.display.PNGEncoderOptions;
