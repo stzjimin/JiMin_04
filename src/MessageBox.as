@@ -18,8 +18,6 @@ package
 			addChild(_messageText);
 			this.pivotX = this.width / 2;
 			this.pivotY = this.height / 2;
-			this.x = this.width / 2;
-			this.y = this.height / 2;
 			_messageText.format.font = "Arial";
 			_messageText.format.size = 20;
 		}
@@ -29,7 +27,7 @@ package
 			_messageText.format.color = color;
 			_messageText.text = text;
 			this.x = parent.width / 2;
-			this.y = parent.height / 2;
+			this.y = parent.height/5 * 4;
 			_frameLate = frameCount;
 			_frameCounter = 0;
 			_messageText.addEventListener(Event.ENTER_FRAME, onFrameEnter);

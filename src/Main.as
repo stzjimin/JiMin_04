@@ -139,7 +139,7 @@ package
 			if(event.data == "Fail")
 				messageBox.showMessageBox("Not Enough Space", 120, _display, Color.RED);
 			else
-				messageBox.showMessageBox("ImageAdd Success", 120, _display);
+				messageBox.showMessageBox("Image Add", 120, _display);
 		}
 		
 		private function onChangeImage(event:Event):void
@@ -157,7 +157,7 @@ package
 		{
 			_display.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
 			_imageMode.spriteSheet = _spriteSheets[Dropdownbar(event.currentTarget).currentViewList.text];
-			_imageMode.imageSelectBar.currentViewList.text = ""
+			_imageMode.imageSelectBar.currentViewList.text = "";
 			_imageMode.imageSelectBar.refreshList();
 		}
 		
@@ -194,7 +194,7 @@ package
 			}
 			else
 			{
-				messageBox.showMessageBox("Load Fail", 120, _display);
+				messageBox.showMessageBox("Load Fail", 120, _display, Color.RED);
 			}
 		}
 	}

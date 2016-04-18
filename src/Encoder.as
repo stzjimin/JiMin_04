@@ -11,7 +11,6 @@ package
 	public class Encoder
 	{
 		private const binaryReg:RegExp = new RegExp("^10*$", "m");
-		private const fileReg:RegExp = new RegExp("(.png|.jpg|.jpeg)$", "m");
 		
 		private var _filePath:String;
 		
@@ -26,8 +25,8 @@ package
 		
 		public function encode(packedData:PackedData):void
 		{
+			getXmlEncode(packedData);
 			getPngEncode(packedData);
-			getXmlEncode(packedData.packedImageQueue);
 		}
 		
 		private function getPngEncode(packedData:PackedData):void
@@ -52,18 +51,28 @@ package
 			fileAccess.close();
 		}
 		
-		private function getXmlEncode(imageQueue:Vector.<ImageInfo>):void
+		private function getXmlEncode(packedData:PackedData):void
 		{
 			var localXmlFile:File = File.desktopDirectory.resolvePath(_filePath + ".xml");
 			var fileAccess:FileStream = new FileStream();
+			
+			var maxWidth:int = 0;
+			var maxHeight:int = 0;
+			
 			fileAccess.open(localXmlFile, FileMode.WRITE);
 			fileAccess.writeUTFBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			fileAccess.writeUTFBytes("<TextureAtlas ImagePath=\"" + localXmlFile.name.replace(".xml",".png") + "\">\n");
-			while(imageQueue.length != 0)
+			for(var i:int = 0; i < packedData.packedImageQueue.length; i ++)
 			{
-				var image:ImageInfo = imageQueue.shift();
-				fileAccess.writeUTFBytes("<SubTexture name=\"" + image.name.replace(fileReg,"") + "\" x=\"" + image.x + "\" y=\"" + image.y + "\" width=\"" + image.width + "\" height=\"" + image.height + "\"/>\n");
+				var image:ImageInfo = packedData.packedImageQueue[i];
+				fileAccess.writeUTFBytes("<SubTexture name=\"" + image.name + "\" x=\"" + image.x + "\" y=\"" + image.y + "\" width=\"" + image.width + "\" height=\"" + image.height + "\"/>\n");
+				if(image.x+image.width > maxWidth)
+					maxWidth = image.x+image.width;
+				if(image.y+image.height > maxHeight)
+					maxHeight = image.y+image.height;
 			}
+			packedData.width = maxWidth;
+			packedData.height = maxHeight;
 			fileAccess.writeUTFBytes("</TextureAtlas>");
 			fileAccess.close();
 		}

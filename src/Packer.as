@@ -51,14 +51,14 @@ package
 			{
 				var image:ImageInfo = _dataQueue.shift();
 				var nonFlag:Boolean = true;
-				trace(_spaceArray.length);
+			//	trace(_spaceArray.length);
 				for(var i:int = 0; i < _spaceArray.length; i++)
 				{
 					if(_spaceArray[i].containsRect(new Rectangle(_spaceArray[i].x, _spaceArray[i].y, image.width, image.height)))
 					{
 						var point:Point = new Point(_spaceArray[i].x, _spaceArray[i].y);
 						var imageRect:Rectangle = new Rectangle(image.x, image.y, image.width, image.height);
-						trace(image.name + " = " + image.x + ", " + image.y + ", " + image.width + ", " + image.height);
+				//		trace(image.name + " = " + image.x + ", " + image.y + ", " + image.width + ", " + image.height);
 						if(addImageInfo.name != image.name)
 							_currentPackedData.bitmapData.copyPixels(_sheetBitmapData, imageRect, point);
 						else
@@ -66,11 +66,7 @@ package
 						image.x = imageRect.x = point.x;
 						image.y = imageRect.y = point.y;
 						_currentPackedData.packedImageQueue.push(image);
-						if(image.x+image.width > maxWidth)
-							maxWidth = image.x+image.width;
-						if(image.y+image.height > maxHeight)
-							maxHeight = image.y+image.height;
-						trace(imageRect.x + ", " + imageRect.y + ", " + imageRect.width + ", " + imageRect.height);
+				//		trace(imageRect.x + ", " + imageRect.y + ", " + imageRect.width + ", " + imageRect.height);
 						searchIntersects(_spaceArray, imageRect);
 						
 						nonFlag = false;
@@ -86,8 +82,6 @@ package
 				
 				_spaceArray.sort(orderYvalue);	//여유공간을  y값으로 정렬하여 상대적으로 아래쪽에 있는 공간은 나중에 선택이 되도록 합니다
 			}
-			_currentPackedData.width = maxWidth;
-			_currentPackedData.height = maxHeight;
 			return true;
 		}
 		

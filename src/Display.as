@@ -46,8 +46,8 @@ package
 		 	_currentImage.pivotY = _currentImage.height / 2;
 			_currentImage.x = _width / 2;
 			_currentImage.y = _height / 2;
-			_currentImage.width = 300;
-			_currentImage.height = 400;
+			_currentImage.width = 1;
+			_currentImage.height = 1;
 			_currentImage.visible = false;
 			_currentImage.addEventListener(TouchEvent.TOUCH, onClickImage);
 			
@@ -56,8 +56,8 @@ package
 			_currentAnimation.pivotY = _currentAnimation.height / 2;
 			_currentAnimation.x = _width / 2;
 			_currentAnimation.y = _height / 2;
-			_currentAnimation.width = 300;
-			_currentAnimation.height = 400;
+			_currentAnimation.width = 1;
+			_currentAnimation.height = 1;
 			_currentAnimation.visible = false;
 			
 			_currentAnimationName = new TextField(120, 20, "");

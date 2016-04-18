@@ -2,11 +2,11 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.display.Loader;
 	import flash.display.PNGEncoderOptions;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
@@ -20,6 +20,7 @@ package
 		private var _imageSelectBar:Dropdownbar;
 		private var _imageAddButton:ButtonObject;
 		private var _imageSaveButton:ButtonObject;
+		private var _currentSaveButton:ButtonObject;
 		
 		private var _spriteSheet:SpriteSheet;
 		
@@ -41,9 +42,16 @@ package
 			_imageSaveButton.x = 220;
 			_imageSaveButton.addEventListener(Event.TRIGGERED, onClickedSaveButton);
 			
+			_currentSaveButton = new ButtonObject(Texture.fromBitmap(Resource.resources["packing.png"] as Bitmap));
+			_currentSaveButton.width = 40;
+			_currentSaveButton.height = 40;
+			_currentSaveButton.x = 270;
+			_currentSaveButton.addEventListener(Event.TRIGGERED, onClickedPackButton);
+			
 			addChild(_imageSelectBar);
 			addChild(_imageAddButton);
 			addChild(_imageSaveButton);
+			addChild(_currentSaveButton);
 		}
 		
 		public function set spriteSheet(value:SpriteSheet):void
@@ -66,6 +74,22 @@ package
 					_imageSelectBar.createList(_spriteSheet.images[i].name);
 			}
 			_imageSelectBar.refreshList();
+		}
+		
+		private function onClickedPackButton(event:Event):void
+		{
+			var fileManager:FileIOManager = new FileIOManager();
+			fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
+		}
+		
+		private function onCompleteSaveSheet(filePath:String):void
+		{
+			var packedData:PackedData = new PackedData(1024, 1024);
+			packedData.bitmapData = _spriteSheet.spriteBitmap.bitmapData;
+			packedData.packedImageQueue = _spriteSheet.images;
+			var encoder:Encoder = new Encoder();
+			encoder.setFilePath(filePath);
+			encoder.encode(packedData);
 		}
 		
 		private function onChangeImage(event:Event):void
@@ -91,24 +115,18 @@ package
 		{
 			var packer:Packer = new Packer();
 			packer.initPacker(_spriteSheet);
-			
+			trace(imageInfo.x + ", " + imageInfo.y);
 			if(packer.addImage(bitmap, imageInfo))
 			{
-				var fileManager:FileIOManager = new FileIOManager();
-				fileManager.saveFile("스프라이트 시트 저장", onCompleteSaveSheet);
+				_spriteSheet.images.push(imageInfo);
+				_spriteSheet.subTextures[imageInfo.name] = Texture.fromBitmap(bitmap);
+				_spriteSheet.spriteBitmap.bitmapData = packer.currentPackedData.bitmapData;
+				_imageSelectBar.createList(imageInfo.name);
+				dispatchEvent(new Event("ImageAdd", false, "Success"));
 			}
 			else
 			{
 				dispatchEvent(new Event("ImageAdd", false, "Fail"));
-			}
-			
-			function onCompleteSaveSheet(filePath:String):void
-			{
-				var encoder:Encoder = new Encoder();
-				encoder.setFilePath(filePath);
-				trace(packer.currentPackedData.packedImageQueue.length);
-				encoder.encode(packer.currentPackedData);
-				dispatchEvent(new Event("ImageAdd", false, packer.currentPackedData));
 			}
 		}
 		
@@ -123,8 +141,11 @@ package
 			trace(filePath);
 			var rect:Rectangle = searchImageRect(_imageSelectBar.currentViewList.text);
 			trace(rect.x + ", " + rect.y + ", " + rect.width + ", " + rect.height);
+			var bitmapData:BitmapData = new BitmapData(rect.width, rect.height);
 			var byteArray:ByteArray = new ByteArray();
-			_spriteSheet.spriteBitmap.bitmapData.encode(new Rectangle(rect.x, rect.y, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
+			bitmapData.copyPixels(_spriteSheet.spriteBitmap.bitmapData, rect, new Point(0, 0));
+			bitmapData.encode(new Rectangle(0, 0, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
+		//	_spriteSheet.spriteBitmap.bitmapData.encode(new Rectangle(rect.x, rect.y, rect.width, rect.height), new PNGEncoderOptions(), byteArray);
 			
 			var localPngFile:File = File.desktopDirectory.resolvePath(filePath + ".png");
 			var fileAccess:FileStream = new FileStream();
@@ -148,6 +169,22 @@ package
 				}
 			}
 			return rect;
+		}
+		
+		private function orderPixels(data1:ImageInfo, data2:ImageInfo):int
+		{
+			if(data1.width*data1.height > data2.width*data2.height) 
+			{ 
+				return -1;
+			} 
+			else if(data1.width*data1.height < data2.width*data2.height) 
+			{ 
+				return 1; 
+			} 
+			else 
+			{ 
+				return 0; 
+			} 
 		}
 	}
 }

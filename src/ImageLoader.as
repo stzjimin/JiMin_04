@@ -7,6 +7,8 @@ package
 
 	public class ImageLoader
 	{
+		private const fileReg:RegExp = new RegExp("(.png|.jpg|.jpeg)$", "m");
+		
 		private var _completeFunc:Function;
 		private var _name:String;
 		
@@ -30,7 +32,7 @@ package
 			var bitmap:Bitmap = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteImageLoad);
 			var imageInfo:ImageInfo = new ImageInfo();
-			imageInfo.name = _name;
+			imageInfo.name = _name.replace(fileReg,"");
 			trace(imageInfo.name);
 			imageInfo.x = bitmap.x;
 			imageInfo.y = bitmap.y;
