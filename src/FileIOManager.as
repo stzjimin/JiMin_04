@@ -9,6 +9,10 @@ package
 		private var _file:File = new File();
 		private var _completeFunc:Function;
 		
+		/**
+		 *파일입출력과 관련하여 입력경로와 출력경로 설정을 도와주는 클래스입니다. 
+		 * 
+		 */		
 		public function FileIOManager()
 		{
 			_file = File.documentsDirectory;

@@ -3,6 +3,7 @@ package
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -16,11 +17,13 @@ package
 		private var _name:String;
 		
 		private var _completeFunc:Function;
+		private var _failFunc:Function;
 		private var _fileManager:FileIOManager;
 		
-		public function SpriteLoader(completeFunc:Function)
+		public function SpriteLoader(completeFunc:Function, failFunc:Function)
 		{
 			_completeFunc = completeFunc;
+			_failFunc = failFunc;
 			_fileManager = new FileIOManager();
 			var pngFileFilter:FileFilter = new FileFilter("png","*.png");
 			_fileManager.selectFile("스프라이트시트 오픈", pngFileFilter, onInputPNG);
@@ -39,8 +42,20 @@ package
 			var urlRequest:URLRequest = new URLRequest(_spritePath);
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompletePngLoad);
-			//	loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 			loader.load(urlRequest);
+		}
+		
+		/**
+		 *로더의 IO애러시 호출될 함수 
+		 * @param event
+		 * 
+		 */		
+		private function uncaughtError(event:IOErrorEvent):void
+		{
+			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			_failFunc("PNG File unLoaded");
 		}
 		
 		/**
@@ -53,11 +68,25 @@ package
 		{
 			_spriteSheet = event.currentTarget.loader.content as Bitmap;
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 			
 			var urlRequest:URLRequest = new URLRequest(_spritePath.replace("png","xml"));
 			var xmlLoader:URLLoader = new URLLoader();
 			xmlLoader.addEventListener("complete", onCompleteXmlLoad);
+			xmlLoader.addEventListener(IOErrorEvent.IO_ERROR, uncaughtXmlError);
 			xmlLoader.load(urlRequest);
+		}
+		
+		/**
+		 *로더의 IO애러시 호출될 함수 
+		 * @param event
+		 * 
+		 */		
+		private function uncaughtXmlError(event:IOErrorEvent):void
+		{
+			event.currentTarget.removeEventListener(Event.COMPLETE, onCompletePngLoad);
+			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			_failFunc("XML File unLoaded");
 		}
 		
 		/**

@@ -39,17 +39,17 @@ package
 		
 		private function onClickStartButton(event:Event):void
 		{
-			dispatchEvent(new Event("StartAnimation"));
+			dispatchEvent(new Event(CustomizeEvent.AnimationStart));
 		}
 		
 		private function onClickStopButton(event:Event):void
 		{
-			dispatchEvent(new Event("StopAnimation"));
+			dispatchEvent(new Event(CustomizeEvent.AnimationStop));
 		}
 		
 		private function onClickDeleteButton(event:Event):void
 		{
-			dispatchEvent(new Event("DeleteSheet"));
+			dispatchEvent(new Event(CustomizeEvent.SpriteDelete));
 		}
 	}
 }

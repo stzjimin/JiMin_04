@@ -246,7 +246,7 @@ package
 				_selectedIndex = _list.indexOf(TextField(event.currentTarget));
 				togleVisible();
 				_currentSelectList.text = TextField(event.currentTarget).text;
-				dispatchEvent(new Event("ListChange"));
+				dispatchEvent(new Event(CustomizeEvent.ListChange));
 			}
 		}
 	}

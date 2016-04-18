@@ -47,7 +47,7 @@ package
 		{
 			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
 			_radioManager.mode = RadioState.ANIMATION;
-			_radioManager.addEventListener("ModeChange",onChangeMode);
+			_radioManager.addEventListener(CustomizeEvent.ModeChange,onChangeMode);
 			
 			_animaionText = new TextField(100, 20, "Animation");
 			_animaionText.border = true;
@@ -82,18 +82,18 @@ package
 			_animationMode.x = 370;
 			_animationMode.y = 550;
 			_animationMode.visible = false;
-			_animationMode.addEventListener("StartAnimation", onStartAnimation);
-			_animationMode.addEventListener("StopAnimation", onStopAnimation);
-			_animationMode.addEventListener("DeleteSheet", onDeleteSheet);
+			_animationMode.addEventListener(CustomizeEvent.AnimationStart, onStartAnimation);
+			_animationMode.addEventListener(CustomizeEvent.AnimationStop, onStopAnimation);
+			_animationMode.addEventListener(CustomizeEvent.SpriteDelete, onDeleteSheet);
 			
 			_imageMode = new ImageMode();
 			_imageMode.x = 370;
 			_imageMode.y = 550;
 			_imageMode.visible = false;
-			_imageMode.addEventListener("ImageChange", onChangeImage);
-			_imageMode.addEventListener("CompleteSave", onCompleteSave);
-			_imageMode.addEventListener("ImageAdd", onCompleteAdd);
-			_imageMode.addEventListener("CompletePack", onCompletePack);
+			_imageMode.addEventListener(CustomizeEvent.ImageChange, onChangeImage);
+			_imageMode.addEventListener(CustomizeEvent.SaveComplete, onCompleteSave);
+			_imageMode.addEventListener(CustomizeEvent.ImageAdd, onCompleteAdd);
+			_imageMode.addEventListener(CustomizeEvent.PackingComplete, onCompletePack);
 			
 			_display = new Display(650, 500);
 			_display.x = 25;
@@ -102,7 +102,7 @@ package
 			_SpriteSheetDrop = new Dropdownbar(150, Texture.fromBitmap(Resource.resources["dropdown.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowUp.png"] as Bitmap), Texture.fromBitmap(Resource.resources["arrowDown.png"] as Bitmap));
 			_SpriteSheetDrop.x = 10;
 			_SpriteSheetDrop.y = 590;
-			_SpriteSheetDrop.addEventListener("ListChange", onChangeSprite);
+			_SpriteSheetDrop.addEventListener(CustomizeEvent.ListChange, onChangeSprite);
 			
 			addChild(_display);
 			addChild(_loadeButton);
@@ -173,8 +173,10 @@ package
 				messageBox.showMessageBox("Not Enough Space", 120, _display, Color.RED);
 			else if(event.data == "Used")
 				messageBox.showMessageBox("Image Already Added", 120, _display, Color.RED);
-			else
+			else if(event.data == "Success")
 				messageBox.showMessageBox("Image Add", 120, _display);
+			else
+				messageBox.showMessageBox(event.data as String, 120, _display);
 		}
 		
 		/**
@@ -249,7 +251,7 @@ package
 		 */		
 		private function onClickLoadButton(event:Event):void
 		{
-			var spriteLoader:SpriteLoader = new SpriteLoader(completeLoad);
+			var spriteLoader:SpriteLoader = new SpriteLoader(completeLoad, uncompleteLoad);
 		}
 		
 		/**
@@ -272,8 +274,14 @@ package
 			}
 			else
 			{
-				messageBox.showMessageBox("Load Fail", 120, _display, Color.RED);
+				messageBox.showMessageBox("Already Added", 120, _display, Color.RED);
 			}
+		}
+		
+		private function uncompleteLoad(errorMessage:String):void
+		{
+			var messageBox:MessageBox = new MessageBox();
+			messageBox.showMessageBox(errorMessage, 120, _display, Color.RED);
 		}
 	}
 }

@@ -25,6 +25,13 @@ package
 		
 		private var _completeFunc:Function;
 		
+		/**
+		 *프로그램이 시작될 때 프로그램에서 필요한 리소스들을 로드해주는 클래스입니다.
+		 * 리소스가 담겨져있는 폴더의 모든 이미지들을 가져온 후 _reasources에 저장해줍니다.
+		 * @param libName
+		 * @param completeFunc
+		 * 
+		 */		
 		public function ResourceLoader(libName:String, completeFunc:Function)
 		{
 			_completeFunc = completeFunc;
@@ -41,7 +48,6 @@ package
 		{
 			if(!rawAssets["isDirectory"])
 				_assetLength = _assetLength + rawAssets.length - 1;
-			trace(_assetLength);
 			for each(var rawAsset:Object in rawAssets)
 			{
 				if(rawAsset["isDirectory"])
@@ -93,8 +99,6 @@ package
 		private function onCompleteLoad(event:Event):void
 		{
 			_resources[getName(event.currentTarget.url)] = event.currentTarget.loader.content as Bitmap;
-		//	trace(getName(event.currentTarget.url) + " = " + _resources[getName(event.currentTarget.url)]);
-		//	trace(_resources[getName(event.currentTarget.url)]);
 			event.currentTarget.removeEventListener(Event.COMPLETE, onCompleteLoad);
 			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 			_assetCounter++;

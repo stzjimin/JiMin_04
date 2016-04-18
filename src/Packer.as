@@ -18,6 +18,11 @@ package
 		private var _count:int;
 		private var _spaceArray:Vector.<Rectangle>;
 		
+		/**
+		 *Assignment_03에 있는 Packer클래스를 본따서 만든 클래스입니다.
+		 * 기본적인 패킹방식은 같다고 보시면 됩니다. 
+		 * 
+		 */		
 		public function Packer()
 		{
 			
@@ -27,7 +32,14 @@ package
 		{
 			return _currentPackedData;
 		}
-
+		
+		/**
+		 *Packer클래스를 초기화시키는 함수입니다.
+		 * 해당 함수가 호출되면 Packer는 패킹준비를 하게 됩니다.
+		 * 이 때 인자로 입력받는 spriteSheet는 ImageMode에서 현재가지고있는 SpriteSheet입니다.
+		 * @param spriteSheet
+		 * 
+		 */		
 		public function initPacker(spriteSheet:SpriteSheet):void
 		{
 			_currentPackedData = new PackedData(MaxWidth, MaxHeight);
@@ -41,7 +53,15 @@ package
 			_spaceArray.push(firstRect);
 		}
 		
-		public function addImage(addBitmap:Bitmap, addImageInfo):Boolean
+		/**
+		 *인자로 입력받은 bitmap과 addImageInfo를 이용하여 새롭게 추가되는 이미지가 있는채로 SpriteSheet를 패킹합니다.
+		 * 이 때 기존의 이미지나 새롭게 추가되는 이미지가 들어갈 공간이 없다면 그 즉시 패킹은 종료되며 false를 반환합니다.
+		 * @param addBitmap
+		 * @param addImageInfo
+		 * @return 
+		 * 
+		 */		
+		public function addImage(addBitmap:Bitmap, addImageInfo:ImageInfo):Boolean
 		{
 			_dataQueue.push(addImageInfo);
 			_dataQueue = _dataQueue.sort(orderPixels);
