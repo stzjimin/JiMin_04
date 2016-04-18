@@ -58,11 +58,11 @@ package Component
 			if(!RadioButton(event.currentTarget).radioState)
 			{
 				_radioButtons[_mode].radioState = false;
-				_radioButtons[_mode].upState = _emptyButtonTexture;
+				_radioButtons[_mode].buttonTexture = _emptyButtonTexture;
 				_radioButtons[_mode].setStateTexture(_emptyButtonTexture);
 				
 				_mode = RadioButton(event.currentTarget).key;
-				RadioButton(event.currentTarget).upState = _checkButtonTexture;
+				RadioButton(event.currentTarget).buttonTexture = _checkButtonTexture;
 				RadioButton(event.currentTarget).setStateTexture(_checkButtonTexture);
 				RadioButton(event.currentTarget).radioState = true;
 				dispatchEvent(new Event(CustomizeEvent.ModeChange));

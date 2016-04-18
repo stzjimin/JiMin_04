@@ -16,9 +16,9 @@ package Component
 
 	public class ButtonObject extends DisplayObjectContainer
 	{
-		private var _downStateScale:Number = 0.9;
+		private const DownStateScale:Number = 0.9;
 		
-		private var _upState:Texture;
+		private var _buttonTexture:Texture;
 		private var _state:String = ButtonState.UP;
 		private var _currentImage:Image;
 		private var _contents:Sprite;
@@ -29,15 +29,15 @@ package Component
 		
 		/**
 		 *Starling에 있는 Button클래스를 필요한부분만 가져와서 간단하게 구현해봤습니다. 
-		 * @param upState
+		 * @param buttonTexture
 		 * 
 		 */		
-		public function ButtonObject(upState:Texture)
+		public function ButtonObject(buttonTexture:Texture)
 		{
-			_upState = upState;
+			_buttonTexture = buttonTexture;
 			
 			_state = ButtonState.UP;
-			_currentImage = new Image(upState);
+			_currentImage = new Image(buttonTexture);
 			
 			_enabled = true;
 			_useHandCursor = true;
@@ -55,19 +55,14 @@ package Component
 			return _contents;
 		}
 
-		public function set downStateScale(value:Number):void
+		public function get buttonTexture():Texture
 		{
-			_downStateScale = value;
+			return _buttonTexture;
 		}
 
-		public function get upState():Texture
+		public function set buttonTexture(value:Texture):void
 		{
-			return _upState;
-		}
-
-		public function set upState(value:Texture):void
-		{
-			_upState = value;
+			_buttonTexture = value;
 		}
 
 		public function get state():String { return _state; }
@@ -81,12 +76,12 @@ package Component
 			switch (_state)
 			{
 				case ButtonState.DOWN:
-					_contents.scaleX = _contents.scaleY = _downStateScale;
-					_contents.x = (1.0 - _downStateScale) / 2.0 * _currentImage.width;
-					_contents.y = (1.0 - _downStateScale) / 2.0 * _currentImage.height;
+					_contents.scaleX = _contents.scaleY = DownStateScale;
+					_contents.x = (1.0 - DownStateScale) / 2.0 * _currentImage.width;
+					_contents.y = (1.0 - DownStateScale) / 2.0 * _currentImage.height;
 					break;
 				case ButtonState.UP:
-					setStateTexture(_upState);
+					setStateTexture(_buttonTexture);
 					break;
 				default:
 					throw new ArgumentError("Invalid button state: " + _state);

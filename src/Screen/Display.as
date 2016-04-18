@@ -115,16 +115,15 @@ package Screen
 		 */		
 		public function set mode(value:String):void
 		{
-			if(value == "Animation" || value == "animation" || value == "ANIMATION")
+			_mode = value
+			if(value == RadioKeyValue.ANIMATION)
 			{
-				_mode = RadioKeyValue.ANIMATION;
 				_currentImage.visible = false;
 				_currentAnimation.visible = true;
 				_currentAnimationName.visible = true;
 			}
-			else if(value == "Image" || value == "image" || value == "IMAGE")
+			else if(value == RadioKeyValue.IMAGE)
 			{
-				_mode = RadioKeyValue.IMAGE;
 				_currentAnimation.visible = false;
 				_currentAnimationName.visible = false;
 				_currentImage.visible = true;
