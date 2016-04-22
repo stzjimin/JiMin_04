@@ -4,23 +4,26 @@ package Screen
 	import flash.system.System;
 	import flash.utils.Dictionary;
 	
+	import Component.ButtonObject;
+	import Component.Dropdownbar;
+	import Component.MessageBox;
+	import Component.RadioButton;
+	import Component.RadioButtonManager;
+	
+	import Data.Resource;
+	import Data.ResourceLoader;
+	import Data.SpriteLoader;
+	import Data.SpriteSheet;
+	
+	import Util.CustomizeEvent;
+	import Util.RadioKeyValue;
+	
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Color;
-	import Component.ButtonObject;
-	import Component.Dropdownbar;
-	import Component.RadioButton;
-	import Component.RadioButtonManager;
-	import Data.Resource;
-	import Data.ResourceLoader;
-	import Data.SpriteLoader;
-	import Data.SpriteSheet;
-	import Component.MessageBox;
-	import Util.CustomizeEvent;
-	import Util.RadioKeyValue;
 
 	public class Main extends Sprite
 	{
