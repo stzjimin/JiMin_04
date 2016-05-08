@@ -59,8 +59,8 @@ package Screen
 		 */		
 		private function completeResourceLoad():void
 		{
-			_radioManager = new RadioButtonManager(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap));
-			_radioManager.mode = RadioKeyValue.ANIMATION;
+			_radioManager = new RadioButtonManager();
+//			_radioManager.mode = RadioKeyValue.ANIMATION;
 			_radioManager.addEventListener(CustomizeEvent.ModeChange,onChangeMode);
 			
 			_animaionText = new TextField(100, 20, "Animation");
@@ -73,17 +73,22 @@ package Screen
 			_imageText.x = 200;
 			_imageText.y = 580;
 			
-			_animationButton = _radioManager.createButton(RadioKeyValue.ANIMATION);
+			/////라디오 버튼///////
+			_animationButton = new RadioButton(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap), RadioKeyValue.ANIMATION);
 			_animationButton.width = 20;
 			_animationButton.height = 20;
 			_animationButton.x = 180;
 			_animationButton.y = 550;
 			
-			_imageButton = _radioManager.createButton(RadioKeyValue.IMAGE);
+			_imageButton = new RadioButton(Texture.fromBitmap(Resource.resources["emptyRadio.png"] as Bitmap), Texture.fromBitmap(Resource.resources["checkRadio.png"] as Bitmap), RadioKeyValue.IMAGE);
 			_imageButton.width = 20;
 			_imageButton.height = 20;
 			_imageButton.x = 180;
 			_imageButton.y = 580;
+			
+			_radioManager.addButton(_animationButton);
+			_radioManager.addButton(_imageButton);
+			//////////////////////
 			
 			_loadeButton = new ButtonObject(Texture.fromBitmap(Resource.resources["load.png"] as Bitmap));
 			_loadeButton.width = 50;
@@ -250,7 +255,8 @@ package Screen
 		 */		
 		private function onChangeMode(event:Event):void
 		{
-			_display.mode = _radioManager.mode;
+			_display.mode = event.data as String;
+			trace(_display.mode);
 			if(_display.mode == RadioKeyValue.ANIMATION)
 			{
 				_imageMode.visible = false;

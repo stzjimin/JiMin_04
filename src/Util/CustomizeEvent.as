@@ -14,9 +14,21 @@ package Util
 		private static const _ListChange:String = "ListChange";
 		private static const _ModeChange:String = "ModeChange";
 		private static const _SpeedChange:String = "SpeedChange";
+		private static const _RadioButtonClick:String = "RadioButtonClick";
+		private static const _RadioButtonUnClick:String = "RadioButtonUnClick";
 		
 		public function CustomizeEvent()
 		{
+		}
+
+		public static function get RadioButtonUnClick():String
+		{
+			return _RadioButtonUnClick;
+		}
+
+		public static function get RadioButtonClick():String
+		{
+			return _RadioButtonClick;
 		}
 
 		public static function get SpeedChange():String

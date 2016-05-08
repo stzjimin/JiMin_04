@@ -1,11 +1,19 @@
 package Component
-{
+{	
+	import Util.CustomizeEvent;
+	
+	import starling.events.Event;
 	import starling.textures.Texture;
 
 	public class RadioButton extends ButtonObject
 	{	
 		private var _key:String;
 		private var _radioState:Boolean;
+		
+		private var _manager:RadioButtonManager;
+		
+		private var _emptyButtonTexture:Texture;
+		private var _checkButtonTexture:Texture;
 		
 		/**
 		 *라디오버튼에 대한 클래스입니다.
@@ -17,23 +25,61 @@ package Component
 		 * @param key
 		 * 
 		 */		
-		public function RadioButton(upState:Texture, key:String)
+		public function RadioButton(emptyButtonTexutre:Texture, checkButtonTexture:Texture, key:String)
 		{
 			_key = key;
 			_radioState = false;
-			super(upState);
+			
+			_emptyButtonTexture = emptyButtonTexutre;
+			_checkButtonTexture = checkButtonTexture;
+			
+			super(emptyButtonTexutre);
+			this.addEventListener(Event.TRIGGERED, onClick);
+			this.addEventListener(CustomizeEvent.RadioButtonUnClick, onUnClick);
+		}
+		
+		public function get manager():RadioButtonManager
+		{
+			return _manager;
 		}
 
+		public function set manager(value:RadioButtonManager):void
+		{
+			_manager = value;
+		}
+
+		private function onClick(event:Event):void
+		{	
+			if(!_manager)
+				return;
+			
+			if(!_radioState)
+			{
+				this.buttonTexture = _checkButtonTexture;
+				this.setStateTexture(_checkButtonTexture);
+				_radioState = true;
+				
+				_manager.dispatchEvent(new Event(CustomizeEvent.RadioButtonClick, false, this));
+			}
+		}
+		
+		private function onUnClick(event:Event):void
+		{
+			_radioState = false;
+			this.buttonTexture = _emptyButtonTexture;
+			this.setStateTexture(_emptyButtonTexture);
+		}
+		
 		public function get radioState():Boolean
 		{
 			return _radioState;
 		}
-
+		
 		public function set radioState(value:Boolean):void
 		{
 			_radioState = value;
 		}
-
+		
 		public function get key():String
 		{
 			return _key;
