@@ -1,10 +1,11 @@
-package Data
+package IO
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLRequest;
+	import Data.ImageInfo;
 
 	public class ImageLoader
 	{

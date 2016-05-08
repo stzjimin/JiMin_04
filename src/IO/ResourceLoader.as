@@ -1,4 +1,4 @@
-package Data
+package IO
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;

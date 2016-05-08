@@ -16,12 +16,12 @@ package Screen
 	import starling.textures.Texture;
 	import Component.ButtonObject;
 	import Component.Dropdownbar;
-	import Data.Encoder;
-	import Data.FileIOManager;
+	import IO.Encoder;
+	import IO.FileIOManager;
 	import Data.ImageInfo;
-	import Data.ImageLoader;
+	import IO.ImageLoader;
 	import Data.PackedData;
-	import Data.Packer;
+	import Logic.Packer;
 	import Data.Resource;
 	import Data.SpriteSheet;
 	import Util.CustomizeEvent;

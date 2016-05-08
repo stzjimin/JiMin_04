@@ -1,9 +1,12 @@
-package Data
+package Logic
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import Data.ImageInfo;
+	import Data.PackedData;
+	import Data.SpriteSheet;
 
 	public class Packer
 	{

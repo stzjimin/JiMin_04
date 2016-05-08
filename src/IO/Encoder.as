@@ -1,4 +1,4 @@
-package Data
+package IO
 {
 	import flash.display.BitmapData;
 	import flash.display.PNGEncoderOptions;
@@ -7,6 +7,8 @@ package Data
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
+	import Data.ImageInfo;
+	import Data.PackedData;
 
 	public class Encoder
 	{

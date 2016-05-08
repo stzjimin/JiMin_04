@@ -11,8 +11,8 @@ package Screen
 	import Component.RadioButtonManager;
 	
 	import Data.Resource;
-	import Data.ResourceLoader;
-	import Data.SpriteLoader;
+	import IO.ResourceLoader;
+	import IO.SpriteLoader;
 	import Data.SpriteSheet;
 	
 	import Util.CustomizeEvent;
